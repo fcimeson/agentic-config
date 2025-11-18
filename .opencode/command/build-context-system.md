@@ -747,7 +747,7 @@ description: "Interactive system builder that creates complete context-aware AI 
       </expected_return>
     </route>
     
-    <route to="@domain-analyzer" when="domain_unclear_or_complex">
+    <route to="@subagents/system-builder/domain-analyzer" when="domain_unclear_or_complex">
       <context_level>Level 1 - Complete Isolation</context_level>
       <pass_data>
         - user_description (domain description)

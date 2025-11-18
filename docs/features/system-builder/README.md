@@ -13,9 +13,11 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/opencode-agents/main/in
 ```
 
 **What you get:**
-- ✅ All development tools (22 components)
+- ✅ All development tools (19 components)
+- ✅ Business tools (5 components)
 - ✅ System builder (7 components)
-- ✅ **Total: 29 components**
+- ✅ Additional tools (1 component)
+- ✅ **Total: 32 components**
 
 ### Add to Existing Installation
 

@@ -1,22 +1,15 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/darrenhinde/opencode-agents",
+  "categories": {
+    "essential": "Minimal components for basic functionality",
+    "standard": "Standard components for typical use",
+    "extended": "Extended components for advanced features",
+    "specialized": "Specialized components for specific domains",
+    "meta": "Meta-level components for system generation"
+  },
   "components": {
     "agents": [
-      {
-        "id": "task-manager",
-        "name": "Task Manager",
-        "type": "agent",
-        "path": ".opencode/agent/task-manager.md",
-        "description": "Breaks down complex features into small, verifiable subtasks",
-        "tags": [
-          "planning",
-          "organization",
-          "task-management"
-        ],
-        "dependencies": [],
-        "category": "core"
-      },
       {
         "id": "codebase-agent",
         "name": "Codebase Agent",
@@ -28,38 +21,32 @@
           "architecture",
           "patterns"
         ],
-        "dependencies": [],
-        "category": "core"
+        "dependencies": [
+          "subagent:task-manager",
+          "subagent:documentation",
+          "subagent:coder-agent",
+          "subagent:tester",
+          "subagent:reviewer",
+          "subagent:build-agent"
+        ],
+        "category": "standard"
       },
       {
-        "id": "image-specialist",
-        "name": "Image Specialist",
+        "id": "openagent",
+        "name": "OpenAgent",
         "type": "agent",
-        "path": ".opencode/agent/image-specialist.md",
-        "description": "Generates and edits images using Gemini AI",
+        "path": ".opencode/agent/openagent.md",
+        "description": "Universal agent for answering queries, executing tasks, and coordinating workflows across any domain",
         "tags": [
-          "images",
-          "ai",
-          "generation"
+          "universal",
+          "flexible",
+          "coordination"
         ],
         "dependencies": [
-          "tool:gemini"
+          "subagent:task-manager",
+          "subagent:documentation"
         ],
-        "category": "extended"
-      },
-      {
-        "id": "workflow-orchestrator",
-        "name": "Workflow Orchestrator",
-        "type": "agent",
-        "path": ".opencode/agent/workflow-orchestrator.md",
-        "description": "Orchestrates complex multi-agent workflows",
-        "tags": [
-          "orchestration",
-          "workflow",
-          "automation"
-        ],
-        "dependencies": [],
-        "category": "extended"
+        "category": "essential"
       },
       {
         "id": "system-builder",
@@ -80,15 +67,45 @@
           "subagent:workflow-designer",
           "subagent:command-creator"
         ],
-        "category": "advanced"
+        "category": "meta"
       }
     ],
     "subagents": [
       {
-        "id": "reviewer",
-        "name": "Code Reviewer",
+        "id": "task-manager",
+        "name": "Task Manager",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/reviewer.md",
+        "path": ".opencode/agent/subagents/core/task-manager.md",
+        "description": "Breaks down complex features into small, verifiable subtasks",
+        "tags": [
+          "planning",
+          "organization",
+          "task-management"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
+        "id": "image-specialist",
+        "name": "Image Specialist",
+        "type": "subagent",
+        "path": ".opencode/agent/subagents/utils/image-specialist.md",
+        "description": "Generates and edits images using Gemini AI",
+        "tags": [
+          "images",
+          "ai",
+          "generation"
+        ],
+        "dependencies": [
+          "tool:gemini"
+        ],
+        "category": "utils"
+      },
+      {
+        "id": "reviewer",
+        "name": "Reviewer",
+        "type": "subagent",
+        "path": ".opencode/agent/subagents/code/reviewer.md",
         "description": "Performs code review with security and quality checks",
         "tags": [
           "review",
@@ -96,13 +113,13 @@
           "quality"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "standard"
       },
       {
         "id": "tester",
-        "name": "Test Writer",
+        "name": "Tester",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/tester.md",
+        "path": ".opencode/agent/subagents/code/tester.md",
         "description": "Writes unit and integration tests",
         "tags": [
           "testing",
@@ -110,13 +127,13 @@
           "quality"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "standard"
       },
       {
         "id": "documentation",
         "name": "Documentation Writer",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/documentation.md",
+        "path": ".opencode/agent/subagents/core/documentation.md",
         "description": "Creates and updates documentation",
         "tags": [
           "docs",
@@ -124,13 +141,13 @@
           "writing"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       },
       {
         "id": "coder-agent",
         "name": "Coder Agent",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/coder-agent.md",
+        "path": ".opencode/agent/subagents/code/coder-agent.md",
         "description": "Executes coding subtasks in sequence",
         "tags": [
           "coding",
@@ -138,13 +155,13 @@
           "execution"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "standard"
       },
       {
         "id": "build-agent",
         "name": "Build Agent",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/build-agent.md",
+        "path": ".opencode/agent/subagents/code/build-agent.md",
         "description": "Type checks and validates builds",
         "tags": [
           "build",
@@ -152,13 +169,13 @@
           "type-checking"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "standard"
       },
       {
         "id": "codebase-pattern-analyst",
         "name": "Codebase Pattern Analyst",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/codebase-pattern-analyst.md",
+        "path": ".opencode/agent/subagents/code/codebase-pattern-analyst.md",
         "description": "Analyzes and implements codebase patterns",
         "tags": [
           "patterns",
@@ -166,13 +183,13 @@
           "architecture"
         ],
         "dependencies": [],
-        "category": "extended"
+        "category": "specialized"
       },
       {
         "id": "domain-analyzer",
         "name": "Domain Analyzer",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/domain-analyzer.md",
+        "path": ".opencode/agent/subagents/system-builder/domain-analyzer.md",
         "description": "Analyzes user domains and recommends agent architectures",
         "tags": [
           "analysis",
@@ -180,13 +197,13 @@
           "architecture"
         ],
         "dependencies": [],
-        "category": "advanced"
+        "category": "meta"
       },
       {
         "id": "agent-generator",
         "name": "Agent Generator",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/agent-generator.md",
+        "path": ".opencode/agent/subagents/system-builder/agent-generator.md",
         "description": "Generates XML-optimized agent files following research-backed patterns",
         "tags": [
           "generation",
@@ -194,13 +211,13 @@
           "agents"
         ],
         "dependencies": [],
-        "category": "advanced"
+        "category": "meta"
       },
       {
         "id": "context-organizer",
         "name": "Context Organizer",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/context-organizer.md",
+        "path": ".opencode/agent/subagents/system-builder/context-organizer.md",
         "description": "Organizes and generates modular context files",
         "tags": [
           "context",
@@ -208,13 +225,13 @@
           "knowledge-management"
         ],
         "dependencies": [],
-        "category": "advanced"
+        "category": "meta"
       },
       {
         "id": "workflow-designer",
         "name": "Workflow Designer",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/workflow-designer.md",
+        "path": ".opencode/agent/subagents/system-builder/workflow-designer.md",
         "description": "Designs complete workflow definitions with context dependencies",
         "tags": [
           "workflows",
@@ -222,13 +239,13 @@
           "orchestration"
         ],
         "dependencies": [],
-        "category": "advanced"
+        "category": "meta"
       },
       {
         "id": "command-creator",
         "name": "Command Creator",
         "type": "subagent",
-        "path": ".opencode/agent/subagents/command-creator.md",
+        "path": ".opencode/agent/subagents/system-builder/command-creator.md",
         "description": "Creates custom slash commands with clear syntax and examples",
         "tags": [
           "commands",
@@ -236,7 +253,7 @@
           "cli"
         ],
         "dependencies": [],
-        "category": "advanced"
+        "category": "meta"
       }
     ],
     "commands": [
@@ -252,7 +269,7 @@
           "validation"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "standard"
       },
       {
         "id": "commit",
@@ -266,7 +283,7 @@
           "version-control"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "standard"
       },
       {
         "id": "context",
@@ -280,7 +297,7 @@
           "management"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       },
       {
         "id": "clean",
@@ -294,7 +311,7 @@
           "build"
         ],
         "dependencies": [],
-        "category": "extended"
+        "category": "standard"
       },
       {
         "id": "optimize",
@@ -308,7 +325,7 @@
           "build"
         ],
         "dependencies": [],
-        "category": "extended"
+        "category": "standard"
       },
       {
         "id": "prompt-enhancer",
@@ -322,7 +339,7 @@
           "enhancement"
         ],
         "dependencies": [],
-        "category": "extended"
+        "category": "standard"
       },
       {
         "id": "worktrees",
@@ -336,7 +353,7 @@
           "workflow"
         ],
         "dependencies": [],
-        "category": "advanced"
+        "category": "specialized"
       },
       {
         "id": "build-context-system",
@@ -353,7 +370,7 @@
         "dependencies": [
           "agent:system-builder"
         ],
-        "category": "advanced"
+        "category": "meta"
       }
     ],
     "tools": [
@@ -371,7 +388,7 @@
         "dependencies": [
           "tool:env"
         ],
-        "category": "extended"
+        "category": "specialized"
       },
       {
         "id": "env",
@@ -385,7 +402,7 @@
           "security"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       }
     ],
     "plugins": [
@@ -403,7 +420,7 @@
         "dependencies": [
           "tool:env"
         ],
-        "category": "extended"
+        "category": "specialized"
       },
       {
         "id": "notify",
@@ -416,7 +433,7 @@
           "alerts"
         ],
         "dependencies": [],
-        "category": "extended"
+        "category": "specialized"
       }
     ],
     "contexts": [
@@ -432,7 +449,7 @@
           "guidelines"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       },
       {
         "id": "project-context",
@@ -446,7 +463,7 @@
           "configuration"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       }
     ],
     "config": [
@@ -462,7 +479,7 @@
           "template"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       },
       {
         "id": "readme",
@@ -476,21 +493,21 @@
           "guide"
         ],
         "dependencies": [],
-        "category": "core"
+        "category": "essential"
       }
     ]
   },
   "profiles": {
-    "core": {
-      "name": "Core",
-      "description": "Minimal essentials - main agent with basic subagents and commands",
+    "essential": {
+      "name": "Essential (Minimal)",
+      "description": "Minimal starter kit - universal agent with core subagents. Great for learning the system or lightweight tasks. Upgrade to Developer or Business for full features.",
       "components": [
-        "agent:task-manager",
-        "agent:codebase-agent",
-        "subagent:tester",
+        "agent:openagent",
+        "subagent:task-manager",
         "subagent:documentation",
-        "subagent:coder-agent",
-        "command:commit",
+        "command:context",
+        "command:clean",
+        "tool:env",
         "context:essential-patterns",
         "context:project-context",
         "config:env-example"
@@ -498,26 +515,45 @@
     },
     "developer": {
       "name": "Developer",
-      "description": "Recommended for daily development - includes testing, review, quality tools, and AI image generation",
+      "description": "Complete software development environment with code generation, testing, review, and build tools. Recommended for most developers.",
+      "badge": "RECOMMENDED",
       "components": [
-        "agent:task-manager",
+        "agent:openagent",
         "agent:codebase-agent",
-        "agent:image-specialist",
-        "agent:workflow-orchestrator",
-        "subagent:reviewer",
-        "subagent:tester",
+        "subagent:task-manager",
         "subagent:documentation",
         "subagent:coder-agent",
+        "subagent:reviewer",
+        "subagent:tester",
         "subagent:build-agent",
         "subagent:codebase-pattern-analyst",
-        "command:test",
         "command:commit",
+        "command:test",
         "command:context",
         "command:clean",
         "command:optimize",
+        "tool:env",
+        "context:essential-patterns",
+        "context:project-context",
+        "config:env-example",
+        "config:readme"
+      ]
+    },
+    "business": {
+      "name": "Business",
+      "description": "Business process automation, content creation, and visual workflows. Includes image generation, notifications, and documentation tools.",
+      "components": [
+        "agent:openagent",
+        "subagent:task-manager",
+        "subagent:documentation",
+        "subagent:image-specialist",
+        "command:context",
+        "command:clean",
         "command:prompt-enhancer",
         "tool:env",
         "tool:gemini",
+        "plugin:notify",
+        "plugin:telegram-notify",
         "context:essential-patterns",
         "context:project-context",
         "config:env-example",
@@ -526,18 +562,18 @@
     },
     "full": {
       "name": "Full",
-      "description": "Everything included - all agents, tools, and plugins for maximum functionality",
+      "description": "Everything included - all agents, subagents, tools, and plugins for maximum functionality.",
       "components": [
-        "agent:task-manager",
+        "agent:openagent",
         "agent:codebase-agent",
-        "agent:image-specialist",
-        "agent:workflow-orchestrator",
-        "subagent:reviewer",
-        "subagent:tester",
+        "subagent:task-manager",
         "subagent:documentation",
         "subagent:coder-agent",
+        "subagent:reviewer",
+        "subagent:tester",
         "subagent:build-agent",
         "subagent:codebase-pattern-analyst",
+        "subagent:image-specialist",
         "command:test",
         "command:commit",
         "command:context",
@@ -556,20 +592,20 @@
       ]
     },
     "advanced": {
-      "name": "Advanced",
-      "description": "Full installation plus system builder and experimental features",
+      "name": "Advanced (Meta-Level)",
+      "description": "Full installation plus System Builder for creating custom AI architectures. For power users and contributors.",
       "components": [
-        "agent:task-manager",
+        "agent:openagent",
         "agent:codebase-agent",
-        "agent:image-specialist",
-        "agent:workflow-orchestrator",
         "agent:system-builder",
-        "subagent:reviewer",
-        "subagent:tester",
+        "subagent:task-manager",
         "subagent:documentation",
         "subagent:coder-agent",
+        "subagent:reviewer",
+        "subagent:tester",
         "subagent:build-agent",
         "subagent:codebase-pattern-analyst",
+        "subagent:image-specialist",
         "subagent:domain-analyzer",
         "subagent:agent-generator",
         "subagent:context-organizer",
@@ -585,6 +621,8 @@
         "command:build-context-system",
         "tool:env",
         "tool:gemini",
+        "plugin:notify",
+        "plugin:telegram-notify",
         "context:essential-patterns",
         "context:project-context",
         "config:env-example",

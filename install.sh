@@ -235,9 +235,9 @@ check_interactive_mode() {
         echo "Or use a profile directly:"
         echo ""
         echo -e "${CYAN}# Quick install with profile${NC}"
-        echo "curl -fsSL https://raw.githubusercontent.com/darrenhinde/opencode-agents/main/install.sh | bash -s core"
+        echo "curl -fsSL https://raw.githubusercontent.com/darrenhinde/opencode-agents/main/install.sh | bash -s essential"
         echo ""
-        echo "Available profiles: core, developer, full, advanced"
+        echo "Available profiles: essential, developer, business, full, advanced"
         echo ""
         cleanup_and_exit 1
     fi
@@ -276,44 +276,61 @@ show_profile_menu() {
     
     echo -e "${BOLD}Available Installation Profiles:${NC}\n"
     
-    # Core profile
-    local core_desc=$(jq -r '.profiles.core.description' "$TEMP_DIR/registry.json")
-    local core_count=$(jq -r '.profiles.core.components | length' "$TEMP_DIR/registry.json")
-    echo -e "  ${GREEN}1) Core${NC}"
-    echo -e "     ${core_desc}"
-    echo -e "     Components: ${core_count}\n"
+    # Essential profile
+    local essential_name=$(jq -r '.profiles.essential.name' "$TEMP_DIR/registry.json")
+    local essential_desc=$(jq -r '.profiles.essential.description' "$TEMP_DIR/registry.json")
+    local essential_count=$(jq -r '.profiles.essential.components | length' "$TEMP_DIR/registry.json")
+    echo -e "  ${GREEN}1) ${essential_name}${NC}"
+    echo -e "     ${essential_desc}"
+    echo -e "     Components: ${essential_count}\n"
     
     # Developer profile
     local dev_desc=$(jq -r '.profiles.developer.description' "$TEMP_DIR/registry.json")
     local dev_count=$(jq -r '.profiles.developer.components | length' "$TEMP_DIR/registry.json")
-    echo -e "  ${BLUE}2) Developer${NC}"
+    local dev_badge=$(jq -r '.profiles.developer.badge // ""' "$TEMP_DIR/registry.json")
+    if [ -n "$dev_badge" ]; then
+        echo -e "  ${BLUE}2) Developer ${GREEN}[${dev_badge}]${NC}"
+    else
+        echo -e "  ${BLUE}2) Developer${NC}"
+    fi
     echo -e "     ${dev_desc}"
     echo -e "     Components: ${dev_count}\n"
     
+    # Business profile
+    local business_name=$(jq -r '.profiles.business.name' "$TEMP_DIR/registry.json")
+    local business_desc=$(jq -r '.profiles.business.description' "$TEMP_DIR/registry.json")
+    local business_count=$(jq -r '.profiles.business.components | length' "$TEMP_DIR/registry.json")
+    echo -e "  ${CYAN}3) ${business_name}${NC}"
+    echo -e "     ${business_desc}"
+    echo -e "     Components: ${business_count}\n"
+    
     # Full profile
+    local full_name=$(jq -r '.profiles.full.name' "$TEMP_DIR/registry.json")
     local full_desc=$(jq -r '.profiles.full.description' "$TEMP_DIR/registry.json")
     local full_count=$(jq -r '.profiles.full.components | length' "$TEMP_DIR/registry.json")
-    echo -e "  ${MAGENTA}3) Full${NC}"
+    echo -e "  ${MAGENTA}4) ${full_name}${NC}"
     echo -e "     ${full_desc}"
     echo -e "     Components: ${full_count}\n"
     
     # Advanced profile
+    local adv_name=$(jq -r '.profiles.advanced.name' "$TEMP_DIR/registry.json")
     local adv_desc=$(jq -r '.profiles.advanced.description' "$TEMP_DIR/registry.json")
     local adv_count=$(jq -r '.profiles.advanced.components | length' "$TEMP_DIR/registry.json")
-    echo -e "  ${YELLOW}4) Advanced${NC}"
+    echo -e "  ${YELLOW}5) ${adv_name}${NC}"
     echo -e "     ${adv_desc}"
     echo -e "     Components: ${adv_count}\n"
     
-    echo "  5) Back to main menu"
+    echo "  6) Back to main menu"
     echo ""
-    read -p "Enter your choice [1-5]: " choice
+    read -p "Enter your choice [1-6]: " choice
     
     case $choice in
-        1) PROFILE="core" ;;
+        1) PROFILE="essential" ;;
         2) PROFILE="developer" ;;
-        3) PROFILE="full" ;;
-        4) PROFILE="advanced" ;;
-        5) show_main_menu; return ;;
+        3) PROFILE="business" ;;
+        4) PROFILE="full" ;;
+        5) PROFILE="advanced" ;;
+        6) show_main_menu; return ;;
         *) print_error "Invalid choice"; sleep 2; show_profile_menu; return ;;
     esac
     
@@ -608,8 +625,8 @@ get_install_strategy() {
 perform_installation() {
     print_step "Preparing installation..."
     
-    # Create directory structure if it doesn't exist
-    mkdir -p "$INSTALL_DIR"/{agent/subagents,command,tool,plugin,context/{core,project}}
+    # Create base directory only - subdirectories created on-demand when files are installed
+    mkdir -p "$INSTALL_DIR"
     
     # Check for collisions
     local collisions=()
@@ -816,14 +833,19 @@ trap 'cleanup_and_exit 1' INT TERM
 main() {
     # Parse command line arguments
     case "${1:-}" in
-        core|--core)
+        essential|--essential)
             INSTALL_MODE="profile"
-            PROFILE="core"
+            PROFILE="essential"
             NON_INTERACTIVE=true
             ;;
         developer|--developer)
             INSTALL_MODE="profile"
             PROFILE="developer"
+            NON_INTERACTIVE=true
+            ;;
+        business|--business)
+            INSTALL_MODE="profile"
+            PROFILE="business"
             NON_INTERACTIVE=true
             ;;
         full|--full)
@@ -847,17 +869,18 @@ main() {
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  core, --core           Install core profile"
-            echo "  developer, --developer Install developer profile"
-            echo "  full, --full           Install full profile"
-            echo "  advanced, --advanced   Install advanced profile"
+            echo "  essential, --essential Install essential profile (minimal)"
+            echo "  developer, --developer Install developer profile (code-focused)"
+            echo "  business, --business   Install business profile (content-focused)"
+            echo "  full, --full           Install full profile (everything except system-builder)"
+            echo "  advanced, --advanced   Install advanced profile (complete system)"
             echo "  list, --list           List all available components"
             echo "  help, --help, -h       Show this help message"
             echo ""
             echo "Examples:"
-            echo "  $0 core"
+            echo "  $0 essential"
             echo "  $0 --developer"
-            echo "  curl -fsSL https://raw.githubusercontent.com/darrenhinde/opencode-agents/main/install.sh | bash -s core"
+            echo "  curl -fsSL https://raw.githubusercontent.com/darrenhinde/opencode-agents/main/install.sh | bash -s essential"
             echo ""
             echo "Without options, runs in interactive mode"
             exit 0

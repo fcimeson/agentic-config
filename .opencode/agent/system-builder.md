@@ -80,7 +80,7 @@ tools:
     <action>Route to domain-analyzer for deep domain analysis and agent identification</action>
     <prerequisites>Requirements document complete</prerequisites>
     <routing>
-      <route to="@domain-analyzer">
+      <route to="@subagents/system-builder/domain-analyzer">
         <context_level>Level 1 - Complete Isolation</context_level>
         <pass_data>
           - domain_profile (name, industry, purpose, users)
@@ -203,7 +203,7 @@ tools:
     <action>Route to agent-generator to create all agent files with XML optimization</action>
     <prerequisites>Architecture plan complete</prerequisites>
     <routing>
-      <route to="@agent-generator">
+      <route to="@subagents/system-builder/agent-generator">
         <context_level>Level 2 - Filtered Context</context_level>
         <pass_data>
           - architecture_plan.agents (orchestrator + subagents specs)
@@ -232,7 +232,7 @@ tools:
     <action>Route to context-organizer to create all context files</action>
     <prerequisites>Architecture plan complete</prerequisites>
     <routing>
-      <route to="@context-organizer">
+      <route to="@subagents/system-builder/context-organizer">
         <context_level>Level 2 - Filtered Context</context_level>
         <pass_data>
           - architecture_plan.context_files (file structure)
@@ -262,7 +262,7 @@ tools:
     <action>Route to workflow-designer to create workflow definitions</action>
     <prerequisites>Architecture plan and context files complete</prerequisites>
     <routing>
-      <route to="@workflow-designer">
+      <route to="@subagents/system-builder/workflow-designer">
         <context_level>Level 2 - Filtered Context</context_level>
         <pass_data>
           - workflow_definitions (from architecture plan)
@@ -293,7 +293,7 @@ tools:
     <action>Route to command-creator to generate custom slash commands</action>
     <prerequisites>Agents and workflows complete</prerequisites>
     <routing>
-      <route to="@command-creator">
+      <route to="@subagents/system-builder/command-creator">
         <context_level>Level 1 - Complete Isolation</context_level>
         <pass_data>
           - command_specifications (from architecture plan)
@@ -631,19 +631,19 @@ tools:
 <context_engineering>
   <determine_context_level>
     function(task_type, subagent_target) {
-      if (subagent_target === "@domain-analyzer") {
+      if (subagent_target === "@subagents/system-builder/domain-analyzer") {
         return "Level 1"; // Isolated analysis
       }
-      if (subagent_target === "@agent-generator") {
+      if (subagent_target === "@subagents/system-builder/agent-generator") {
         return "Level 2"; // Needs architecture + domain analysis
       }
-      if (subagent_target === "@context-organizer") {
+      if (subagent_target === "@subagents/system-builder/context-organizer") {
         return "Level 2"; // Needs domain analysis + use cases
       }
-      if (subagent_target === "@workflow-designer") {
+      if (subagent_target === "@subagents/system-builder/workflow-designer") {
         return "Level 2"; // Needs agents + context files
       }
-      if (subagent_target === "@command-creator") {
+      if (subagent_target === "@subagents/system-builder/command-creator") {
         return "Level 1"; // Just needs command specs
       }
       return "Level 1"; // Default to isolation

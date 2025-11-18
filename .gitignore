@@ -51,6 +51,7 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+.tmp/
 
 # Optional npm cache directory
 .npm
