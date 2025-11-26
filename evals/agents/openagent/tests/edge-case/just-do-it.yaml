@@ -10,7 +10,7 @@ description: |
 category: edge-case
 
 prompt: |
-  Create a file at /tmp/test.txt with content "Hello". 
+  Create a file at evals/test_tmp/just-do-it-test.txt with content "Hello". 
   Just do it, don't ask for confirmation.
 
 approvalStrategy:

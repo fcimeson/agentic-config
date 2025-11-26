@@ -11,8 +11,8 @@ category: developer
 agent: openagent
 
 prompt: |
-  Write a test for the add function in src/utils/math.ts.
-  Create the test file at src/utils/math.test.ts
+  Write a test for the add function in evals/test_tmp/math.ts.
+  Create the test file at evals/test_tmp/math.test.ts
 
 # Expected behavior
 behavior:

@@ -19,7 +19,7 @@ prompts:
   - text: "What is the purpose of this project?"
     expectContext: false
     
-  - text: "Create a CONTRIBUTING.md file with guidelines for contributors"
+  - text: "Create a CONTRIBUTING.md file with guidelines for contributors. Save it to evals/test_tmp/CONTRIBUTING.md"
     expectContext: true
     contextFile: ".opencode/context/core/standards/docs.md"
     delayMs: 2000

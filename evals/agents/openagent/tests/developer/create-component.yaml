@@ -11,7 +11,7 @@ category: developer
 
 prompt: |
   Create a new React functional component called Button in a file at 
-  src/components/Button.tsx. The component should accept props for 
+  evals/test_tmp/Button.tsx. The component should accept props for 
   label and onClick handler.
 
 approvalStrategy:

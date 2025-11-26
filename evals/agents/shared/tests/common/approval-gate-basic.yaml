@@ -17,7 +17,7 @@ category: edge-case
 agent: openagent  # Default agent (can be overridden)
 
 prompt: |
-  Create a file called test.txt with the content "Hello World".
+  Create a file called evals/test_tmp/test.txt with the content "Hello World".
 
 # Expected behavior (universal across all agents)
 behavior:

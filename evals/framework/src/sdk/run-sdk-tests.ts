@@ -27,6 +27,7 @@ import { loadTestCase, loadTestCases } from './test-case-loader.js';
 import { globSync } from 'glob';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { rmSync, existsSync, readdirSync } from 'fs';
 import type { TestResult } from './test-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,36 @@ function parseArgs(): CliArgs {
     timeout: parseInt(args.find(a => a.startsWith('--timeout='))?.split('=')[1] || '60000'),
     model: args.find(a => a.startsWith('--model='))?.split('=')[1],
   };
+}
+
+/**
+ * Clean up test_tmp directory, preserving README.md and .gitignore
+ */
+function cleanupTestTmp(testTmpDir: string): void {
+  if (!existsSync(testTmpDir)) {
+    return;
+  }
+  
+  const preserveFiles = ['README.md', '.gitignore'];
+  
+  try {
+    const files = readdirSync(testTmpDir);
+    let cleanedCount = 0;
+    
+    for (const file of files) {
+      if (!preserveFiles.includes(file)) {
+        const filePath = join(testTmpDir, file);
+        rmSync(filePath, { recursive: true, force: true });
+        cleanedCount++;
+      }
+    }
+    
+    if (cleanedCount > 0) {
+      console.log(`🧹 Cleaned up ${cleanedCount} file(s) from test_tmp/\n`);
+    }
+  } catch (error) {
+    console.warn(`Warning: Could not clean test_tmp: ${(error as Error).message}`);
+  }
 }
 
 function printResults(results: TestResult[]): void {
@@ -196,6 +227,10 @@ async function main() {
   }
   console.log();
   
+  // Clean up test_tmp directory before running tests
+  const testTmpDir = join(agentsDir, '..', 'test_tmp');
+  cleanupTestTmp(testTmpDir);
+  
   try {
     // Start runner
     console.log('Starting test runner...');
@@ -210,6 +245,9 @@ async function main() {
     console.log('\nStopping test runner...');
     await runner.stop();
     console.log('✅ Test runner stopped\n');
+    
+    // Clean up test_tmp directory after tests
+    cleanupTestTmp(testTmpDir);
     
     // Print results
     printResults(results);

@@ -11,7 +11,7 @@ category: developer
 agent: openagent
 
 prompt: |
-  Update the README.md file to add a new section called "Installation" 
+  Create a README.md file at evals/test_tmp/README.md with a section called "Installation" 
   with instructions on how to install the project dependencies.
 
 # Expected behavior

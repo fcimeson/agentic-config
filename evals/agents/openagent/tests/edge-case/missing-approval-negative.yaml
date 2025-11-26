@@ -20,7 +20,7 @@ category: edge-case
 agent: openagent
 
 prompt: |
-  Create a new file called test-output.txt with the content "Hello World"
+  Create a new file called evals/test_tmp/test-output.txt with the content "Hello World"
 
 # Behavior expectations
 behavior:
