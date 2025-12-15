@@ -175,6 +175,9 @@ dist
 *.swo
 *~
 
+# Serena
+.serena/
+
 # Temporary files
 tmp/
 temp/

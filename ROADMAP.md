@@ -1,84 +1,49 @@
-# OpenAgents Roadmap
+# agentic-config Roadmap
 
-> **Interactive Board:** [GitHub Project - OpenAgents Roadmap & Tasks](https://github.com/users/darrenhinde/projects/2)
+This roadmap tracks the evolution of this fork into a **prompt-based installer/distribution** for AI coding configurations.
 
-This roadmap tracks the evolution of OpenAgents - an AI agent framework for plan-first development workflows with approval-based execution.
+Core goals:
+- Keep using the **existing profile system** (`registry.json`)
+- Keep `install.sh` as the **single installer engine**
+- Support installing into **project** (`./.opencode`) and **global** (`~/.config/opencode`) targets
+- Continue shipping and improving agents, commands, system builder, tools, and plugins
 
 ---
 
 ## 🎯 Now (Current Focus)
 
-**Priority items for the next 4-6 weeks:**
+**Priority items for the next 4–6 weeks:**
 
-- [ ] Stabilize OpenCode CLI integration
-- [ ] Improve evaluation framework reliability
-- [ ] Enhance documentation for new users
-- [ ] Add more example workflows
+- [ ] README/docs alignment for this fork (fix repo URLs, targets, examples)
+- [ ] Define and document install targets clearly (project vs global)
+- [ ] Expand/curate profiles for personal use cases (e.g. `esp32`, `linux-admin`, etc.)
+- [ ] Remove or quarantine unused files over time (without breaking installer profiles)
+- [ ] Document upstream syncing workflow (merge/rebase + conflict strategy)
 
 ---
 
 ## 🔜 Next (Coming Soon)
 
-**Planned for the following 6-8 weeks:**
+**Planned for the following 6–10 weeks:**
 
-- [ ] Support for additional AI coding tools (Cursor, Claude Code)
-- [ ] Enhanced context-aware system builder
-- [ ] Multi-language template improvements
-- [ ] Community contribution guidelines
+- [ ] Add `.env` handling per install target (copy/merge/skip) via `install.sh`
+- [ ] Add MCP server selection per install target (format + prompts TBD)
+- [ ] Improve installer UX for non-interactive installs (flags + output)
+- [ ] Add more example profiles/workflows to validate real-world installs
 
 ---
 
-## 🔭 Later (Exploration)
+## 🔭 Later (Exploration / TBD)
 
-**Ideas and explorations for future consideration:**
-
-- [ ] Visual workflow designer
-- [ ] Agent marketplace/registry
-- [ ] Cloud-based agent coordination
-- [ ] Integration with popular IDEs
+- [ ] Claude Code support alongside OpenCode (details TBD; avoid guessing formats)
+- [ ] Better “update” story for customized installs (guided upgrade strategies)
+- [ ] Additional tooling integrations as needed
 
 ---
 
 ## 📝 How to Use This Roadmap
 
-### View the Interactive Board
-Visit the [GitHub Project](https://github.com/users/darrenhinde/projects/2) to see:
-- Current status of all items
-- Priority levels
-- Detailed descriptions
-- Progress tracking
+- Track work via GitHub issues in this repo: https://github.com/fcimeson/agentic-config/issues
+- Label suggestions with `idea` where appropriate
 
-### Suggest Ideas
-Create an issue with the `idea` label:
-```bash
-gh issue create \
-  --repo darrenhinde/OpenAgents \
-  --title "Your idea title" \
-  --body "Description of your idea..." \
-  --label "idea"
-```
-
-### Track Progress
-```bash
-# List all ideas
-gh issue list --repo darrenhinde/OpenAgents --label idea
-
-# View specific issue
-gh issue view 123 --repo darrenhinde/OpenAgents
-```
-
----
-
-## 🏷️ Labels Used
-
-- **idea** - High-level proposals and feature ideas
-- **feature** - New features or enhancements
-- **bug** - Bug fixes and issues
-- **docs** - Documentation improvements
-- **agents** - Agent system related
-- **evals** - Evaluation framework
-- **framework** - Core framework changes
-
----
-
-**Last Updated:** December 4, 2025
+**Last Updated:** December 15, 2025

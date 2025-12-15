@@ -1,8 +1,8 @@
 # Development Guide
 
-**Complete guide for developing on the OpenAgents repository**
+**Complete guide for developing on the agentic-config repository**
 
-This guide covers everything you need to know to develop agents, commands, tools, and contribute to the OpenAgents ecosystem.
+This guide covers everything you need to know to develop agents, commands, tools, and contribute to the agentic-config ecosystem.
 
 ## Table of Contents
 
@@ -30,8 +30,8 @@ This guide covers everything you need to know to develop agents, commands, tools
 
 ```bash
 # Clone the repository
-git clone https://github.com/darrenhinde/OpenAgents.git
-cd OpenAgents
+git clone https://github.com/fcimeson/agentic-config.git
+cd agentic-config
 
 # Install dependencies for testing framework
 cd evals/framework
@@ -66,7 +66,7 @@ opencode-agents/
 │   │       ├── system-builder/   # System building subagents
 │   │       └── utils/            # Utility subagents
 │   ├── command/                  # Slash commands
-│   │   ├── openagents/           # OpenAgents-specific commands
+│   │   ├── openagents/           # OpenAgents-specific commands (upstream naming)
 │   │   │   └── new-agents/       # Agent creation system ⭐
 │   │   └── prompt-engineering/   # Prompt optimization commands
 │   ├── context/                  # Context files

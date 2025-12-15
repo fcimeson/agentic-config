@@ -15,7 +15,7 @@ bash scripts/tests/test-compatibility.sh
 
 **Run remotely:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/scripts/tests/test-compatibility.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/scripts/tests/test-compatibility.sh | bash
 ```
 
 **What it tests:**

@@ -1,45 +1,66 @@
 <div align="center">
 
-# OpenAgents
+# agentic-config (Personal Fork)
 
-### AI agent framework for plan-first development workflows with approval-based execution
+### Prompt-based installer for AI coding setups (profiles → project/user config)
 
-[![GitHub stars](https://img.shields.io/github/stars/darrenhinde/OpenAgents?style=social)](https://github.com/darrenhinde/OpenAgents/stargazers)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub last commit](https://img.shields.io/github/last-commit/darrenhinde/OpenAgents)](https://github.com/darrenhinde/OpenAgents/commits/main)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](docs/contributing/CONTRIBUTING.md)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow.svg?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/darrenhinde)
+Repo: https://github.com/fcimeson/agentic-config
 
-**Multi-language support:** TypeScript • Python • Go • Rust  
-**Features:** Automatic testing • Code review • Validation
+Upstream base: https://github.com/darrenhinde/OpenAgents
 
-> **🚀 Future Plans:** Currently optimized for OpenCode CLI. Support for other AI coding tools (Cursor, Claude Code, etc.) will be added after stabilizing the OpenCode integration.
+**Primary goal:** Use `install.sh` + the existing profile system to install curated configs into:
+- Project folders (`./.opencode`)
+- User config (via the installer's existing global target, e.g. `~/.config/opencode`)
+
+**Planned extensions:** MCP server selection per target • `.env` install per target • Claude Code support (TBD)
 
 </div>
 
-[![Watch Demo](https://img.youtube.com/vi/EOIzFMdmox8/maxresdefault.jpg)](https://youtu.be/EOIzFMdmox8?si=4ZSsVlAkhMxVmF2R)
 
-> **Note:** This repository has evolved since the demo video with continuous improvements to make it easier for others to use in their projects. The core concepts remain the same, but installation and component organization have been streamlined.
+## Why Use This Fork?
 
-> 📹 **Following along with the video?** The simplified structure shown in the tutorial is available on the [`video-simple`](https://github.com/darrenhinde/OpenAgents/tree/video-simple) branch.
+- ✅ **Prompt-based installer** via `curl | bash` (built around `install.sh`)
+- ✅ **Profiles-first workflow** (reuse/extend the existing profile system)
+- ✅ **Targeted installs**: install into project folders (`./.opencode`) or user config (existing global target)
+- ✅ **Personal setups**: add domain profiles for your work (e.g. `esp32`, `linux-admin`, etc.)
+- 🧩 **Planned**: select MCP servers and write config per install target
+- 🧩 **Planned**: copy/merge `.env` behavior into the chosen target
+- 🧩 **Planned**: support Claude Code alongside OpenCode (details TBD)
 
+This repo is intentionally diverging into a **personal customization and distribution** while still tracking upstream improvements.
 
-## Why Use This?
+## Keeping in sync with upstream
 
-- ✅ **Multi-language support** - Works with TypeScript, Python, Go, Rust, and more
-- ✅ **Plan-first workflow** - Agents propose plans before implementing
-- ✅ **Incremental execution** - Step-by-step implementation with validation
-- ✅ **Quality built-in** - Automatic testing, type checking, and code review
-- ✅ **Your patterns** - Agents follow your coding standards from context files
+If you want to pull updates from the upstream project while keeping your changes:
+
+```bash
+# Add upstream once
+git remote add upstream https://github.com/darrenhinde/OpenAgents.git
+
+# Fetch upstream changes
+git fetch upstream
+
+# Merge upstream main into your main
+git checkout main
+git merge upstream/main
+```
+
+If you prefer a linear history, use rebase instead of merge:
+
+```bash
+git checkout main
+git fetch upstream
+git rebase upstream/main
+```
+
+When resolving conflicts, prioritize keeping this fork's installer/profile direction (especially `install.sh`, `registry.json`, and docs that reference this repo).
 
 ---
 
 ## Quick Start
 
-### Step 1: Install OpenCode CLI (Follow official guide)
-```bash
-https://opencode.ai/docs# 
-```
+### Step 1: Install OpenCode CLI
+See the official docs: https://opencode.ai/docs
 ### Step 2: Install Agents & Commands
 
 **Option A: Interactive Installer**
@@ -51,7 +72,7 @@ https://opencode.ai/docs#
 
 ```bash
 # Download the installer
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh -o install.sh
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh -o install.sh
 
 # Run interactively
 bash install.sh
@@ -63,7 +84,7 @@ bash install.sh
 
 ```bash
 # Download the installer
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh -o install.sh
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh -o install.sh
 
 # Run interactively
 bash install.sh
@@ -75,7 +96,7 @@ bash install.sh
 
 ```powershell
 # Download the script
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh" -OutFile "install.sh"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh" -OutFile "install.sh"
 
 # Run with Git Bash
 & "C:\Program Files\Git\bin\bash.exe" install.sh
@@ -106,19 +127,19 @@ The installer offers:
 
 ```bash
 # Essential - Minimal essentials (9 components)
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s essential
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash -s essential
 
 # Developer - Recommended for daily work (19 components)
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s developer
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash -s developer
 
 # Business - Business automation and content creation (15 components)
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s business
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash -s business
 
 # Full - Everything included (25 components)
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s full
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash -s full
 
 # Advanced - Full + System Builder (32 components)
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s advanced
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash -s advanced
 ```
 </details>
 
@@ -127,7 +148,7 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 
 ```powershell
 # Download script
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh" -OutFile "install.sh"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh" -OutFile "install.sh"
 
 # Essential profile
 & "C:\Program Files\Git\bin\bash.exe" install.sh essential
@@ -151,14 +172,14 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/darrenhinde/OpenAgents
 **Option C: Manual Install**
 ```bash
 # Clone this repository
-git clone https://github.com/darrenhinde/OpenAgents.git
-cd OpenAgents
+git clone https://github.com/fcimeson/agentic-config.git
+cd agentic-config
 
 # Install to OpenCode directory (global)
-mkdir -p ~/.opencode
-cp -r .opencode/agent ~/.opencode/
-cp -r .opencode/command ~/.opencode/
-cp -r .opencode/context ~/.opencode/
+mkdir -p ~/.config/opencode
+cp -r .opencode/agent ~/.config/opencode/
+cp -r .opencode/command ~/.config/opencode/
+cp -r .opencode/context ~/.config/opencode/
 ```
 
 ### Step 3: Start Building
@@ -291,7 +312,7 @@ git add .
 ### Add Your Patterns
 ```bash
 # Edit your project context
-nano ~/.opencode/context/project/project-context.md
+nano ~/.config/opencode/context/project/project-context.md
 
 # Add your patterns:
 # **API Endpoint Pattern:**
@@ -315,7 +336,7 @@ The System Builder is an interactive tool that generates complete `.opencode` ar
 ### Quick Start
 ```bash
 # Install advanced profile (includes system builder)
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s advanced
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash -s advanced
 
 # Run the interactive builder
 /build-context-system
@@ -355,14 +376,14 @@ Get notified when OpenCode sessions go idle.
 
 ```bash
 # Copy plugin directory
-cp -r .opencode/plugin ~/.opencode/
+cp -r .opencode/plugin ~/.config/opencode/
 
 # Install dependencies
-cd ~/.opencode/plugin
+cd ~/.config/opencode/plugin
 npm install
 
 # Configure
-cd ~/OpenAgents
+cd ~/agentic-config
 cp env.example .env
 # Edit .env with TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID
 ```
@@ -376,14 +397,14 @@ Generate and edit images using Gemini AI.
 
 ```bash
 # Copy tool directory
-cp -r .opencode/tool ~/.opencode/
+cp -r .opencode/tool ~/.config/opencode/
 
 # Install dependencies
-cd ~/.opencode/tool
+cd ~/.config/opencode/tool
 npm install
 
 # Configure
-cd ~/OpenAgents
+cd ~/agentic-config
 cp env.example .env
 # Edit .env with GEMINI_API_KEY
 ```
@@ -407,10 +428,10 @@ A: Bash 3.2+ (works on macOS default bash). Run `bash scripts/tests/test-compati
 A: No, they're optional. Only install if you want Telegram notifications or Gemini AI features.
 
 **Q: Where should I install - globally or per-project?**  
-A: Global (`~/.opencode/`) works for most. Project-specific (`.opencode/`) if you need different configs per project.
+A: Global (`~/.config/opencode/`) works for most. Project-specific (`./.opencode/`) if you need different configs per project.
 
 **Q: How do I add my own coding patterns?**  
-A: Edit `~/.opencode/context/project/project-context.md` - agents automatically load this file.
+A: Edit `~/.config/opencode/context/project/project-context.md` - agents automatically load this file.
 
 **Q: What languages are supported?**  
 A: The agents work with any language (TypeScript, Python, Go, Rust, etc.) and adapt based on your project files.
@@ -425,8 +446,8 @@ A: Yes! Use the installer's list feature to see all components:
 ```
 Or cherry-pick individual files with curl:
 ```bash
-curl -o ~/.opencode/agent/opencoder.md \
-  https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/.opencode/agent/opencoder.md
+curl -o ~/.config/opencode/agent/opencoder.md \
+  https://raw.githubusercontent.com/fcimeson/agentic-config/main/.opencode/agent/opencoder.md
 ```
 
 ---
@@ -489,7 +510,7 @@ Keep your components up to date:
 ./update.sh
 
 # Or re-run the installer
-curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash
 ```
 
 ---
@@ -572,13 +593,4 @@ opencode --agent opencoder
 **Learn more:** 
 - [OpenAgent Guide](docs/agents/openagent.md) - General tasks and coordination
 - [OpenCoder Guide](docs/agents/opencoder.md) - Specialized development work
-
----
-## Support This Work
-
-If this helped you out and you're feeling generous, consider funding my coffee habit ☕
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/darrenhinde)
-
-Totally optional, but appreciated.
 
