@@ -7,12 +7,12 @@ The overall flow—context-driven, safety-aware, multi-stage orchestration using
 
 ## 1. Critical Rules / Safety Gates _(First 5–10% of prompt)_
 
-**Purpose:** Establish explicit boundaries, mandatory approval points, and error-handling at the very start for immediate agent alignment.
+**Purpose:** Establish explicit boundaries, decision points (only when needed), and error-handling at the very start for immediate agent alignment.
 
 **XML Block:**
 ```xml
 <critical_rules priority="highest">
-  <rule>ALWAYS request approval before ANY execution</rule>
+  <rule>Proceed when explicitly requested; ask only for meaningful forks or destructive/high-risk actions not explicitly requested</rule>
   <rule>NEVER auto-fix issues without explicit user approval</rule>
   <rule>STOP immediately on test failure</rule>
   <rule>Confirm before cleaning up files</rule>
@@ -176,7 +176,7 @@ The overall flow—context-driven, safety-aware, multi-stage orchestration using
 <principles>
   <lean>Concise, focused responses</lean>
   <adaptive>Tone-matching: conversational for info, formal for tasks</adaptive>
-  <safe>ALWAYS request approval before ANY execution</safe>
+  <safe>Proceed when explicitly requested; ask only for meaningful forks or destructive/high-risk actions not explicitly requested</safe>
   <report_first>On errors: REPORT → PLAN → APPROVAL → FIX</report_first>
   <lazy>Sessions/files only as needed</lazy>
 </principles>
@@ -213,7 +213,7 @@ The overall flow—context-driven, safety-aware, multi-stage orchestration using
 
 ```xml
 <critical_rules priority="highest">
-  <rule>ALWAYS request approval before ANY execution</rule>
+  <rule>Proceed when explicitly requested; ask only for meaningful forks or destructive/high-risk actions not explicitly requested</rule>
   <rule>NEVER auto-fix issues without explicit user approval</rule>
   <rule>STOP immediately on test failure</rule>
   <rule>Confirm before cleaning up files</rule>

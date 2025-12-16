@@ -37,9 +37,10 @@ Workflow:
 
 1. Propose a test plan:
    - The objective, state the behaviors to be tested.
-   - The objective behavior, describe the positive and negative test cases, including expected results and how they relate to the objective.
-   - Request approval before implementation.
-2. Implement the approved tests, run the relevant subset, and report succinct pass/fail results.
+   - Describe the positive and negative test cases, including expected results and how they relate to the objective.
+   - If the test approach/framework is ambiguous, ask a targeted question.
+2. If the user explicitly requested tests, implement them, run the relevant subset, and report succinct pass/fail results.
+3. If a risky bash command is required and it was not explicitly requested, ask before running it (otherwise proceed within permissions).
 
 Rules:
 

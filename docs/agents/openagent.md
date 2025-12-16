@@ -28,12 +28,12 @@ OpenAgent is your **universal coordinator** that:
 - ✅ **Executes general tasks** - Create files, documentation, simple updates
 - ✅ **Coordinates workflows** - Handles most general tasks directly, delegates to specialists when needed
 - ✅ **Preserves context** - Remembers information across multiple steps
-- ✅ **Keeps you in control** - Always asks for approval before taking action
+- ✅ **Keeps you in control** - Proceeds when explicitly requested; asks only when a decision is needed (meaningful tradeoffs) or for destructive/high-risk actions not explicitly requested
 
 Think of OpenAgent as a **smart project coordinator** who:
 - Understands what you need
-- Plans how to do it
-- Asks for your approval
+- Plans how to do it (when helpful)
+- Asks targeted questions only when a decision is needed (meaningful tradeoffs / missing requirements)
 - Executes the plan (directly or via delegation)
 - Confirms everything is done right
 
@@ -50,8 +50,9 @@ graph LR
     A[You Ask] --> B{Question or Task?}
     B -->|Question| C[Get Answer]
     B -->|Task| D[See Plan]
-    D --> E[Approve Plan]
-    E --> F[Watch Execution]
+    D --> E{Decision needed?}
+    E -->|Yes| F[Answer Question]
+    E -->|No| G[Watch Execution]
     F --> G[Confirm Done]
     
     style A fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#000
@@ -64,7 +65,7 @@ graph LR
 ```
 
 **For Questions**: You ask → You get an answer
-**For Tasks**: You ask → See plan → Approve → Watch it happen → Confirm done
+**For Tasks**: You ask → See plan → (Only if needed: answer a decision question) → Watch it happen → Confirm done
 
 ### Universal Coordinator Philosophy
 
@@ -106,7 +107,7 @@ graph TD
 - "How do I use async/await in JavaScript?"
 - "Explain what this code does"
 
-**What Happens**: You get a direct, helpful answer. No approval needed.
+**What Happens**: You get a direct, helpful answer. No decision needed.
 
 ---
 
@@ -148,7 +149,7 @@ graph TD
 
 **What Happens**: 
 1. You see a plan
-2. You approve it
+2. If a decision is needed (tradeoffs / missing requirements), OpenAgent asks a targeted question
 3. OpenAgent executes it
 4. You confirm it's done right
 
@@ -165,9 +166,11 @@ graph TD
         A2 --> A3{Question or Task?}
     end
     
-    subgraph Stage2["Stage 2: Approve"]
+    subgraph Stage2["Stage 2: Decide (Only If Needed)"]
         B1[Create Plan] --> B2[Present to User]
-        B2 --> B3[Wait for Approval]
+        B2 --> B3{Decision Needed?}
+        B3 -->|Yes| B4[Ask Targeted Question]
+        B3 -->|No| B5[Proceed]
     end
     
     subgraph Stage3["Stage 3: Execute"]
@@ -182,8 +185,11 @@ graph TD
         D1[Check Quality] --> D2[Run Tests if Applicable]
         D2 --> D3{Issues Found?}
         D3 -->|Yes| D4[Report & Propose Fixes]
-        D4 --> D5[Wait for Approval]
-        D5 --> D6[Apply Approved Fixes]
+        D4 --> D5{Decision Needed?}
+        D5 -->|Yes| D6[Ask Targeted Question]
+        D5 -->|No| D7[Proceed]
+        D6 --> D8[Apply Fixes]
+        D7 --> D8
         D6 --> D2
         D3 -->|No| D7[Ask: Review Work?]
     end
@@ -250,7 +256,7 @@ graph TD
 
 ---
 
-### Stage 2: Approve ⚠️ (MANDATORY - CRITICAL RULE)
+### Stage 2: Decide (Only If Needed)
 
 ```mermaid
 graph TD
@@ -278,7 +284,7 @@ graph TD
 
 **What happens**: OpenAgent creates a plan and shows it to you.
 
-**Critical Rule**: OpenAgent **ALWAYS** requests approval before **ANY** execution (bash, write, edit, task delegation). This is absolute and strictly enforced. Read and list operations do not require approval.
+**Decision rule**: OpenAgent proceeds when you explicitly requested the task. It only pauses to ask for a decision when there is a meaningful fork (tradeoffs / missing requirements) or when a destructive/high-risk action is required and was not explicitly requested. Read and list operations do not require a decision.
 
 **Your experience**: You see something like:
 ```
@@ -288,7 +294,7 @@ graph TD
 3. Add installation instructions
 4. Add usage examples
 
-**Approval needed before proceeding.**
+**Decision needed (only if there are open questions/tradeoffs).**
 ```
 
 **What you do**: Review the plan and say "yes" or "no" (or ask for changes).
@@ -299,7 +305,7 @@ graph TD
 
 ```mermaid
 graph TD
-    A[Approval Received] --> B[Review Plan Steps]
+    A[Ready to Execute] --> B[Review Plan Steps]
     B --> C{Need Context Files?}
     
     C -->|Yes| D[Create Session]
@@ -366,11 +372,12 @@ graph TD
     
     I --> J[Report Issues Clearly]
     J --> K[Propose Fix Plan]
-    K --> L[Request Approval]
-    L --> M{User Approves Fix?}
+    K --> L{Decision Needed?}
+    L -->|Yes| M[Ask Targeted Question]
+    L -->|No| N[Proceed]
     
-    M -->|Yes| N[Apply Fixes]
-    M -->|No| O[End - Issues Remain]
+    M --> O[Apply Fixes]
+    N --> O
     
     N --> D
     
@@ -400,7 +407,7 @@ graph TD
 **Critical Rules Enforced**:
 1. **STOP on failure** - Immediately stops execution when tests fail or errors occur
 2. **REPORT first** - Always reports issues before proposing fixes
-3. **NEVER auto-fix** - Always requests approval before fixing issues
+3. **NEVER auto-fix** - Only proceeds with fixes after needed decisions are resolved
 
 **Your experience when validation passes**: You see:
 ```
@@ -423,8 +430,8 @@ If OpenAgent runs tests or validation and finds issues, it follows a **strict pr
 1. ⛔ **STOPS** execution immediately (no auto-fix)
 2. 📋 **REPORTS** all issues/failures clearly
 3. 📝 **PROPOSES** a fix plan with specific steps
-4. ⚠️ **REQUESTS APPROVAL** before fixing (absolute requirement)
-5. ✅ **PROCEEDS** only after you approve
+4. 🧭 **ASKS FOR A DECISION** before fixing only when the fix is a meaningful fork or involves destructive/high-risk actions not explicitly requested
+5. ✅ **PROCEEDS** (and re-validates) once the decision is made
 6. 🔄 **RE-VALIDATES** after fixes are applied
 
 **Your experience**: You see something like:
@@ -440,10 +447,10 @@ If OpenAgent runs tests or validation and finds issues, it follows a **strict pr
 2. Add token generation to login endpoint
 3. Add session cleanup to logout handler
 
-**Approval needed before proceeding with fixes.**
+**Decision needed before proceeding with fixes (only if there are tradeoffs/risks).**
 ```
 
-**Critical**: OpenAgent will **NEVER** auto-fix issues without your explicit approval. This is an absolute rule with strict enforcement. After fixes are applied, validation runs again to ensure everything passes.
+**Critical**: OpenAgent will **NEVER** auto-fix issues without either (a) explicit user instruction to proceed, or (b) resolving any needed decision points for risky/destructive changes. After fixes are applied, validation runs again to ensure everything passes.
 
 ---
 
@@ -539,7 +546,7 @@ Is this complete and satisfactory?
 Should I clean up temporary session files at .tmp/sessions/20250118-143022-a4f2/?
 ```
 
-**What you do**: Confirm you're happy with the results and approve cleanup if needed.
+**What you do**: Confirm you're happy with the results and confirm cleanup if needed.
 
 ---
 
@@ -613,7 +620,7 @@ sequenceDiagram
 
 **Unique IDs**: Each session gets a unique ID like `20250118-143022-a4f2` to prevent conflicts.
 
-**Safe Cleanup**: OpenAgent only deletes files it created, and only after you approve (Critical Rule).
+**Safe Cleanup**: OpenAgent only deletes files it created, and only after you confirm (Critical Rule).
 
 **Concurrent Safety**: Multiple users can work simultaneously without interfering with each other.
 
@@ -832,9 +839,9 @@ sequenceDiagram
     Note over OpenAgent: Stage 1: Analyze
     OpenAgent->>OpenAgent: Complex task, needs task-manager
     
-    Note over OpenAgent: Stage 2: Approve
-    OpenAgent->>User: ## Proposed Plan<br/>1. Create requirements<br/>2. Delegate to task-manager<br/>3. Review breakdown<br/><br/>**Approval needed**
-    User->>OpenAgent: Approved
+    Note over OpenAgent: Stage 2: Decide (if needed)
+    OpenAgent->>User: ## Proposed Plan<br/>1. Create requirements<br/>2. Delegate to task-manager<br/>3. Review breakdown<br/><br/>**Decision needed only if there are open questions/tradeoffs.**
+    User->>OpenAgent: (Optional) Answers decision question / confirms
     
     Note over OpenAgent: Stage 3: Execute
     OpenAgent->>Session: Create session abc123
@@ -929,7 +936,7 @@ graph TD
 **Instead of**: "Make this better"
 **Try**: "Refactor this function to use async/await and add error handling"
 
-**Why**: Specific requests help OpenAgent create better plans and get approval faster.
+**Why**: Specific requests reduce ambiguity and help OpenAgent avoid extra decision questions.
 
 ---
 
@@ -940,7 +947,7 @@ When OpenAgent shows you a plan, take a moment to review it:
 - ✅ Are there any steps you'd change?
 - ✅ Is anything missing?
 
-**Tip**: You can ask OpenAgent to revise the plan before approving.
+**Tip**: You can ask OpenAgent to revise the plan before proceeding.
 
 ---
 
@@ -976,7 +983,7 @@ Let OpenAgent delegate to specialists:
 
 ### 5. Clean Up Sessions Regularly
 
-After completing a workflow, approve session cleanup:
+After completing a workflow, confirm session cleanup:
 - ✅ Keeps your workspace clean
 - ✅ Prevents accumulation of temporary files
 - ✅ Frees up disk space
@@ -1048,19 +1055,19 @@ ls -la .tmp/sessions/
 
 ---
 
-### 11. Use Explicit Approvals for Learning
+### 11. Use Decision Questions for Learning
 
-When learning a new codebase or technology, use OpenAgent's approval step as a learning opportunity:
+When learning a new codebase or technology, use OpenAgent's plan + decision questions as a learning opportunity:
 - Read the plan carefully
 - Ask questions about steps you don't understand
-- Request explanations before approving
+- Request explanations before deciding
 
 **Example**:
 ```
 OpenAgent: "I'll refactor this to use dependency injection"
 You: "What is dependency injection and why is it better here?"
 OpenAgent: [Explains]
-You: "Got it, approved!"
+You: "Got it, proceed."
 ```
 
 ---
@@ -1151,21 +1158,21 @@ Conversational for questions, formal for tasks. Matches the context.
 Only creates sessions/files when actually needed. No unnecessary overhead. Fetches context files on-demand.
 
 ### 🔒 Safe (CRITICAL RULE - Absolute & Strict)
-**ALWAYS** requests approval before ANY execution (bash, write, edit, task delegation). Confirms before cleanup. This is an absolute rule with strict enforcement.
+Proceeds when the user explicitly requested the task. Requests a decision only when there is a meaningful fork (tradeoffs / missing requirements) or when a destructive/high-risk action is required and was not explicitly requested. Confirms before cleanup.
 
 ### 📋 Report First (CRITICAL RULE - Absolute & Strict)
 When tests fail or issues are found:
 1. **STOP** immediately (no auto-fix)
 2. **REPORT** the issues clearly
 3. **PROPOSE** fix plan
-4. **REQUEST APPROVAL** (mandatory)
-5. **FIX** (only after approval)
+4. **ASK FOR A DECISION** only if the proposed fix is a meaningful fork or involves destructive/high-risk actions not explicitly requested
+5. **FIX** (and re-validate) once the decision is made
 
 **Never auto-fixes** - you're always in control. This is an absolute rule with strict enforcement.
 
 ### 🛡️ Critical Rules Summary
 Three critical rules are enforced with absolute priority:
-1. **Approval Gate** - Always request approval before execution
+1. **Decision Gate** - Ask for a decision only when needed (meaningful forks or destructive/high-risk actions not explicitly requested)
 2. **Stop on Failure** - Stop immediately on test failures or errors, never auto-fix
 3. **Confirm Cleanup** - Always confirm before deleting session files
 
@@ -1175,16 +1182,16 @@ Three critical rules are enforced with absolute priority:
 
 OpenAgent is your **intelligent universal agent** that:
 
-✅ **Plans before acting** - Shows you the plan and waits for approval (Critical Rule)
+✅ **Plans before acting** - Shares a plan for non-trivial work; asks only targeted decision questions when needed
 ✅ **Preserves context** - Remembers information across multiple steps
 ✅ **Executes directly** - Handles most tasks itself, delegates only when needed
 ✅ **Keeps you in control** - Always confirms before cleanup (Critical Rule)
 ✅ **Handles general tasks** - Questions, docs, coordination, simple updates (delegates complex coding to opencoder)
-✅ **Reports before fixing** - Never auto-fixes issues without approval (Critical Rule)
+✅ **Reports before fixing** - Never auto-fixes issues without confirmation/decision when needed (Critical Rule)
 
 **Key Takeaways**:
 1. Be specific in your requests
-2. Review plans before approving
+2. Review plans and answer any decision questions
 3. Use multi-step workflows for complex projects
 4. OpenAgent handles most tasks directly - delegation is the exception, not the rule
 5. Clean up sessions when done
@@ -1217,7 +1224,7 @@ OpenAgent has been optimized based on research-backed prompt engineering pattern
 ✅ **Universal agent philosophy** - Execute directly first, delegate only when truly needed
 
 **Key Principles**:
-- **Tier 1 (Highest)**: Safety & Approval Gates - Always override other tiers
+- **Tier 1 (Highest)**: Safety & Decision Gates - Always override other tiers
 - **Tier 2**: Core Workflow - Stage progression and delegation routing
 - **Tier 3**: Optimization - Lazy initialization, session management, context discovery
 

@@ -30,8 +30,9 @@ Responsibilities:
 
 Workflow:
 
-1. Propose what documentation will be added/updated and ask for approval.
-2. Apply edits and summarize changes.
+1. State what documentation will be added/updated.
+2. If the doc scope/location is ambiguous or there are meaningful tradeoffs, ask a targeted question.
+3. Otherwise, apply edits and summarize changes.
 
 Constraints:
 

@@ -114,22 +114,24 @@ CONSEQUENCE OF SKIPPING: Task plans that don't align with project architecture =
            exit_criteria:
            - {specific, measurable completion criteria}
            
-           Approval needed before file creation.
+           decision_needed:
+           - {only include if there is a meaningful fork, tradeoff, or missing requirement}
            ```
         
-        5. Wait for explicit approval before proceeding
+        5. If there is a decision_needed item, request guidance from the orchestrator. Otherwise proceed to Stage 2 when invoked to create files.
+
       </process>
       <outputs>
         <subtask_plan>Structured breakdown with sequences and dependencies</subtask_plan>
         <context_applied>List of standards and patterns used</context_applied>
         <exit_criteria>Measurable completion conditions</exit_criteria>
       </outputs>
-      <checkpoint>Plan presented and awaiting approval</checkpoint>
+      <checkpoint>Plan presented; proceed unless a decision is requested</checkpoint>
     </stage>
 
     <stage id="2" name="FileCreation">
       <action>Create task directory structure and files</action>
-      <prerequisites>Plan approved (Stage 1 complete)</prerequisites>
+      <prerequisites>Plan confirmed OR no decision required (Stage 1 complete)</prerequisites>
       <process>
         1. Create directory structure:
            - Base: tasks/subtasks/{feature}/

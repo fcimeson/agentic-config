@@ -31,7 +31,7 @@ Responsibilities:
 Workflow:
 
 1. **ANALYZE** request and load relevant project context
-2. Share a short review plan (files/concerns to inspect, including security aspects) and ask to proceed.
+2. Share a short review plan (files/concerns to inspect, including security aspects) then proceed.
 3. Provide concise review notes with suggested diffs (do not apply changes), including any security concerns.
 
 Output:

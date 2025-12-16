@@ -1684,9 +1684,9 @@ Invoke: task(subagent_type="general", description="...", prompt="...")
 ## 📝 Orchestration Rules
 
 From @.opencode/agents/orchestration-agent.md:
-- Request approval before execution
+- Proceed when explicitly requested; ask only for meaningful forks or destructive/high-risk actions not explicitly requested
 - Stop on failures (don't auto-fix)
-- Report → Propose → Approve → Fix
+- Report → Propose → Decide → Fix
 - Confirm before cleanup
 ```
 
@@ -1697,12 +1697,12 @@ From @.opencode/agents/orchestration-agent.md:
 ### Your Orchestration Agent (Primary)
 - **Already active** - it's processing your prompts
 - **Has task delegation** capability
-- **Follows approval workflow**
+- **Follows decision points only when needed**
 - **Can invoke task-manager** when needed
 
 ### Your Task-Manager Subagent
 - **Invoked via task tool** when you need breakdown
-- **Two-phase workflow**: Plan → Approve → Create
+- **Two-phase workflow**: Plan → Decide (if needed) → Create
 - **Creates files** in `tasks/subtasks/{feature}/`
 - **Returns structured** task plans
 

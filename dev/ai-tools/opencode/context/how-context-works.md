@@ -330,11 +330,11 @@ Research identifies these common mistakes that reduce effectiveness:
 
 ```xml
 <!-- DON'T DO THIS -->
-<rule_1>Always request approval</rule_1>
+<rule_1>Ask for a decision only when needed</rule_1>
 ... 2000 tokens later ...
-<rule_2>Always get approval before execution</rule_2>
+<rule_2>Proceed when explicitly requested; ask only on meaningful forks or destructive/high-risk actions not explicitly requested</rule_2>
 ... 3000 tokens later ...
-<rule_3>Approval must be obtained</rule_3>
+<rule_3>Decisions should only be requested when needed</rule_3>
 ```
 
 **Problem:** Repetition causes ambiguity and wastes tokens.
