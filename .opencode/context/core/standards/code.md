@@ -101,6 +101,56 @@ for (let i = 0; i < users.length; i++) {
 - **Variables**: descriptive (userCount not uc), const by default
 - **Constants**: UPPER_SNAKE_CASE
 
+## Scripting Standards (Bash & Python)
+
+### Bash
+
+Use bash for **small, straightforward glue** only.
+
+✅ DO:
+- Keep scripts **minimal** and readable
+- Prefer simple pipelines and direct commands over abstraction
+- Inline one-off values rather than introducing extra variables
+
+❌ DON'T:
+- Add lots of boilerplate “strict mode” / heavy error-handling scaffolding by default
+- Build mini frameworks (helpers, complex flag parsing, deep function hierarchies)
+
+Rule of thumb: if a bash script starts needing non-trivial parsing, branching, state, retries, or grows beyond a small utility, **switch to Python**.
+
+### Python
+
+Use Python for anything **non-trivial**. The extra structure (functions, validation, error handling) is expected and encouraged.
+
+✅ DO:
+- Always provide a CLI interface via `argparse`
+- Structure scripts with `main()` and small testable functions
+- Prefer Python over bash when the task has multiple steps, complex conditions, or non-trivial input/output
+
+`argparse` template:
+
+```python
+import argparse
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Describe what this script does")
+    parser.add_argument("--input", required=True, help="Path to input")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+
+    # ... implement logic ...
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
 ## Error Handling
 
 ```javascript
