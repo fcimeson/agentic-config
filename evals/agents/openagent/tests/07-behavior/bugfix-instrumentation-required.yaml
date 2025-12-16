@@ -1,0 +1,37 @@
+id: bugfix-instrumentation-required
+name: Bugfix Proposal Requires Instrumentation When No Stack Trace
+
+description: |
+  Validates that the agent does NOT propose random fixes when observability is limited.
+  If no stack trace/debugger is available, the agent should propose targeted instrumentation
+  to narrow down the issue before suggesting code changes.
+
+category: developer
+prompt: |
+  We have a non-crashing bug in an embedded target (no JTAG, no stack traces).
+  Symptom: after running for ~30 minutes, the device stops responding to button presses.
+  You can't reproduce locally and you only have access to serial logs.
+
+  Describe your fix proposal.
+
+approvalStrategy:
+  type: auto-approve
+
+behavior:
+  # We expect a structured approach that includes instrumentation.
+  mustContain:
+    - "instrument"
+  mustNotContain:
+    - "try"
+    - "random"
+
+expectedViolations:
+  - rule: report-first
+    shouldViolate: false
+    severity: error
+
+tags:
+  - bugfix
+  - observability
+  - instrumentation
+  - behavior

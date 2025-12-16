@@ -28,6 +28,11 @@ Responsibilities:
 - Load project-specific context for accurate pattern validation
 - First sentence should be Start with "Reviewing..., what would you devs do if I didn't check up on you?"
 
+Bug-fix quality gate (required):
+- Confirm the fix is tied to a clearly stated root-cause hypothesis (not random trial-and-error).
+- If the original issue had low observability (no stack trace, non-crashing, embedded constraints), confirm appropriate instrumentation/harness was added or a clear plan exists.
+- Confirm there is a validation story (tests, build/typecheck, or a reproducible scenario + expected signals).
+
 Workflow:
 
 1. **ANALYZE** request and load relevant project context
