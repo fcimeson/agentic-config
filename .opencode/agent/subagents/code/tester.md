@@ -3,12 +3,14 @@ description: "Test authoring and TDD agent"
 mode: subagent
 temperature: 0.1
 tools:
+  "*": false
   read: true
   grep: true
   glob: true
   edit: true
-  write: true
   bash: true
+  task: false
+  write: true
 permissions:
   bash:
     "rm -rf *": "ask"

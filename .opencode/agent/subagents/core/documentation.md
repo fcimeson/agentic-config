@@ -3,12 +3,14 @@ description: "Documentation authoring agent"
 mode: subagent
 temperature: 0.2
 tools:
+  "*": false
   read: true
   grep: true
   glob: true
   edit: true
-  write: true
   bash: false
+  task: false
+  write: true
 permissions:
   bash:
     "*": "deny"

@@ -4,12 +4,15 @@ description: "Code review, security, and quality assurance agent"
 mode: subagent
 temperature: 0.1
 tools:
+  "*": false
   read: true
   grep: true
   glob: true
   bash: false
   edit: false
+  task: false
   write: false
+  "maria_*": true
 permissions:
   bash:
     "*": "deny"

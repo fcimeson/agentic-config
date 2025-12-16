@@ -8,7 +8,9 @@ tools:
   glob: true
   bash: false
   edit: false
+  task: false
   write: false
+  "maria_*": true
 permissions:
   bash:
     "*": "deny"

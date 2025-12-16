@@ -3,6 +3,7 @@ description: "Context-aware task breakdown specialist transforming complex featu
 mode: subagent
 temperature: 0.1
 tools:
+  "*": false
   read: true
   edit: true
   write: true

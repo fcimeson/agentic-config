@@ -3,6 +3,7 @@ description: "Executes coding subtasks in sequence, ensuring completion as speci
 mode: subagent
 temperature: 0
 tools:
+  "*": false
   read: true
   edit: true
   write: true

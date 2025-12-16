@@ -3,9 +3,11 @@ description: "Type check and build validation agent"
 mode: subagent
 temperature: 0.1
 tools:
+  "*": false
   bash: true
   read: true
   grep: true
+  task: false
 permissions:
   bash:
     "tsc": "allow"
