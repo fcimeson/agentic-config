@@ -37,9 +37,15 @@ When the user runs this command, execute the following workflow:
      - Not just which files changed, but what those changes accomplish
      - Group related changes together
      - Be specific about components/features affected
-   
+
+   **Body formatting rules (avoid extra blank lines):**
+   - Use exactly **one** blank line between subject and body
+   - Use a tight bullet list: one bullet per line, **no** blank lines between bullets
+
 5. **Execute the commit**:
-   - Run `git commit -m "<generated message>"` with full message including extended description
+   - Use **two message paragraphs** (subject + body):
+     - `git commit -m "<subject>" -m "<body>"`
+   - Ensure `<body>` contains the full bullet list in a single string (do **not** pass one `-m` per bullet, as that can introduce extra blank lines)
    - Display the commit hash and confirm success
    - Provide brief summary of what was committed
 
@@ -49,11 +55,14 @@ When the user runs this command, execute the following workflow:
 ```
 <type>: Brief description of what was changed
 
-Optional longer description if needed:
 - Bullet point for significant changes
 - Another bullet point for important details
 - Focus on functionality, not just file names
 ```
+
+**Formatting notes:**
+- Exactly **one** blank line between subject and body
+- No blank lines between bullet items
 
 ### Rules
 
