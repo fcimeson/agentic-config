@@ -2,6 +2,8 @@
 # OpenCode Agent Configuration
 description: "Multi-language implementation agent for modular and functional development"
 mode: primary
+model: github-copilot/gpt-5.1-codex
+small_model: github-copilot/gpt-5.1-codex-mini
 temperature: 0.1
 tools:
   read: true

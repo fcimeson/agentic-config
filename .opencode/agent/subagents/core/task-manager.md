@@ -1,6 +1,8 @@
 ---
 description: "Context-aware task breakdown specialist transforming complex features into atomic, verifiable subtasks with dependency tracking"
 mode: subagent
+model: github-copilot/gpt-5.2
+small_model: github-copilot/gpt-5-mini
 temperature: 0.1
 tools:
   "*": false

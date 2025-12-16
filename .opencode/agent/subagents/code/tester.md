@@ -1,6 +1,7 @@
 ---
 description: "Test authoring and TDD agent"
 mode: subagent
+model: github-copilot/gpt-5.1-codex
 temperature: 0.1
 tools:
   "*": false

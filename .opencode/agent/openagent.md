@@ -2,6 +2,8 @@
 # OpenCode Agent Configuration
 description: "Universal agent for answering queries, executing tasks, and coordinating workflows across any domain"
 mode: primary
+model: github-copilot/gpt-5.1-codex
+small_model: github-copilot/gpt-5.1-codex-mini
 temperature: 0.2
 tools:
   read: true

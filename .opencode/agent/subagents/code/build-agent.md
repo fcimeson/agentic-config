@@ -1,6 +1,7 @@
 ---
 description: "Type check and build validation agent"
 mode: subagent
+model: github-copilot/gpt-5-mini
 temperature: 0.1
 tools:
   "*": false

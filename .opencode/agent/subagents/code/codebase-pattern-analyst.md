@@ -1,6 +1,8 @@
 ---
 description: "Codebase pattern analysis agent for finding similar implementations"
 mode: subagent
+model: github-copilot/claude-sonnet-4.5
+small_model: github-copilot/claude-haiku-4.5
 temperature: 0.1
 tools:
   read: true

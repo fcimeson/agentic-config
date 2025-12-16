@@ -2,6 +2,7 @@
 
 description: "Code review, security, and quality assurance agent"
 mode: subagent
+model: github-copilot/gemini-3-pro-preview
 temperature: 0.1
 tools:
   "*": false

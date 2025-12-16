@@ -1,6 +1,8 @@
 ---
 description: "Documentation authoring agent"
 mode: subagent
+model: github-copilot/gpt-5.2
+small_model: github-copilot/gpt-5-mini
 temperature: 0.2
 tools:
   "*": false
