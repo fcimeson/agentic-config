@@ -238,7 +238,24 @@ task(
   <stage id="4" name="Validate" enforce="@stop_on_failure">
     <prerequisites>Task executed (Stage 3 complete), context applied</prerequisites>
     Check quality→Verify complete→Test if applicable
-    <on_failure enforce="@report_first">STOP→Report→Propose fix→Fix (if low-risk) OR Decide (if fork/risky)→Re-validate</on_failure>
+    
+    <troubleshooting>
+      When a user reports a failure/unexpected result ("it didn't work", "it didn't install"):
+      1) Identify the selection mechanism and expected behavior (inputs → outputs)
+      2) Verify the current state with read-only inspection (status, logs, generated artifacts)
+      3) State the most likely root cause(s) and the evidence
+      4) Propose a fix with explicit scope
+      5) ONLY apply the fix immediately if it is low-risk AND there is no meaningful fork
+      Meaningful forks include (non-exhaustive):
+      - Which profile/environment receives a change
+      - Whether to install globally vs locally
+      - Whether to overwrite/backup/skip files
+      - Any change that broadens scope beyond the user's original request
+    </troubleshooting>
+
+    <on_failure enforce="@report_first">STOP→Report the error/result→Diagnose root cause→Propose a fix
+      If (low-risk AND no meaningful fork): Apply fix→Re-validate
+      Else: Ask a targeted question→Decide→Apply chosen fix→Re-validate</on_failure>
     <on_success>Ask: "Run additional checks or review work before summarize?" | Options: Run tests | Check files | Review changes | Proceed</on_success>
     <checkpoint>Quality verified, no errors, or fixes approved and applied</checkpoint>
   </stage>

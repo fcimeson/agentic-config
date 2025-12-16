@@ -27,6 +27,8 @@
 - [ ] Edge cases handled
 - [ ] Error cases handled
 - [ ] No obvious bugs
+- [ ] Root cause identified for any reported failures (not just symptoms)
+- [ ] Proposed fix scope is explicit; meaningful forks were confirmed with requester
 
 ### Code Quality
 - [ ] Clear, descriptive naming
