@@ -44,9 +44,44 @@ else
 fi
 
 # Configuration
-REPO_URL="https://github.com/darrenhinde/OpenAgents"
 BRANCH="${OPENCODE_BRANCH:-main}"  # Allow override via environment variable
-RAW_URL="https://raw.githubusercontent.com/darrenhinde/OpenAgents/${BRANCH}"
+
+detect_github_repo_slug() {
+    # Prefer explicit override
+    if [ -n "${OPENCODE_REPO:-}" ]; then
+        printf "%s" "${OPENCODE_REPO}"
+        return 0
+    fi
+
+    # Best-effort: infer from git origin when running in a local clone
+    if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        local origin_url
+        origin_url="$(git config --get remote.origin.url 2>/dev/null || true)"
+
+        # Support git@github.com:owner/repo(.git)
+        if [[ "$origin_url" =~ ^git@github\.com:([^/]+/[^/]+)(\.git)?$ ]]; then
+            local slug="${BASH_REMATCH[1]}"
+            printf "%s" "${slug%.git}"
+            return 0
+        fi
+
+        # Support https://github.com/owner/repo(.git)
+        if [[ "$origin_url" =~ ^https?://github\.com/([^/]+/[^/]+)(\.git)?$ ]]; then
+            local slug="${BASH_REMATCH[1]}"
+            printf "%s" "${slug%.git}"
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+DEFAULT_REPO_SLUG="fcimeson/agentic-config"
+REPO_SLUG="$(detect_github_repo_slug || true)"
+REPO_SLUG="${REPO_SLUG:-$DEFAULT_REPO_SLUG}"
+
+REPO_URL="https://github.com/${REPO_SLUG}"
+RAW_URL="${OPENCODE_RAW_URL:-https://raw.githubusercontent.com/${REPO_SLUG}/${BRANCH}}"
 REGISTRY_URL="${RAW_URL}/registry.json"
 INSTALL_DIR="${OPENCODE_INSTALL_DIR:-.opencode}"  # Allow override via environment variable
 TEMP_DIR="/tmp/opencode-installer-$$"
@@ -60,6 +95,8 @@ INSTALL_MODE=""
 PROFILE=""
 NON_INTERACTIVE=false
 CUSTOM_INSTALL_DIR=""  # Set via --install-dir argument
+LOCAL_FILES=false
+LOCAL_FILES_REGISTRY_PATH=""
 
 #############################################################################
 # Utility Functions
@@ -253,14 +290,43 @@ check_dependencies() {
 
 fetch_registry() {
     print_step "Fetching component registry..."
-    
+
     mkdir -p "$TEMP_DIR"
-    
+
+    if [ "$LOCAL_FILES" = true ]; then
+        local registry_path
+        registry_path="${LOCAL_FILES_REGISTRY_PATH}"
+
+        if [ -z "$registry_path" ]; then
+            # Default to registry.json next to this script
+            registry_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/registry.json"
+        fi
+
+        if [ ! -f "$registry_path" ]; then
+            print_error "Local registry not found: $registry_path"
+            exit 1
+        fi
+
+        print_info "Registry source: local"
+        print_info "Registry path: ${registry_path}"
+
+        if ! cp "$registry_path" "$TEMP_DIR/registry.json"; then
+            print_error "Failed to copy local registry: $registry_path"
+            exit 1
+        fi
+
+        print_success "Registry loaded successfully"
+        return 0
+    fi
+
+    print_info "Registry source: remote"
+    print_info "Registry URL: ${REGISTRY_URL}"
+
     if ! curl -fsSL "$REGISTRY_URL" -o "$TEMP_DIR/registry.json"; then
         print_error "Failed to fetch registry from $REGISTRY_URL"
         exit 1
     fi
-    
+
     print_success "Registry fetched successfully"
 }
 
@@ -334,7 +400,7 @@ check_interactive_mode() {
         echo "For interactive mode, download the script first:"
         echo ""
         echo -e "${CYAN}# Download the script${NC}"
-        echo "curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh -o install.sh"
+        echo "curl -fsSL https://raw.githubusercontent.com/${REPO_SLUG}/main/install.sh -o install.sh"
         echo ""
         echo -e "${CYAN}# Run interactively${NC}"
         echo "bash install.sh"
@@ -342,7 +408,7 @@ check_interactive_mode() {
         echo "Or use a profile directly:"
         echo ""
         echo -e "${CYAN}# Quick install with profile${NC}"
-        echo "curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s essential"
+        echo "curl -fsSL https://raw.githubusercontent.com/${REPO_SLUG}/main/install.sh | bash -s essential"
         echo ""
         echo "Available profiles: essential, developer, business, full, advanced"
         echo ""
@@ -919,35 +985,56 @@ perform_installation() {
             continue
         fi
         
-        # Download component
-        local url="${RAW_URL}/${path}"
-        
         # Create parent directory if needed
         mkdir -p "$(dirname "$dest")"
-        
-        if curl -fsSL "$url" -o "$dest"; then
-            # Transform paths for global installation (any non-local path)
-            # Local paths: .opencode or */.opencode
-            if [[ "$INSTALL_DIR" != ".opencode" ]] && [[ "$INSTALL_DIR" != *"/.opencode" ]]; then
-                # Expand tilde and get absolute path for transformation
-                local expanded_path="${INSTALL_DIR/#\~/$HOME}"
-                # Transform @.opencode/context/ references to actual install path
-                sed -i.bak -e "s|@\.opencode/context/|@${expanded_path}/context/|g" \
-                           -e "s|\.opencode/context|${expanded_path}/context|g" "$dest" 2>/dev/null || true
-                rm -f "${dest}.bak" 2>/dev/null || true
+
+        if [ "$LOCAL_FILES" = true ]; then
+            local script_dir
+            script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+            local src="${script_dir}/${path}"
+
+            if [ ! -f "$src" ]; then
+                print_error "Local source not found for ${type}:${id}: $src"
+                failed=$((failed + 1))
+                continue
             fi
-            
-            # Show appropriate message based on whether file existed before
-            if [ "$file_existed" = true ]; then
-                print_success "Updated ${type}: ${id}"
+
+            if cp "$src" "$dest"; then
+                :
             else
-                print_success "Installed ${type}: ${id}"
+                print_error "Failed to install ${type}: ${id}"
+                failed=$((failed + 1))
+                continue
             fi
-            installed=$((installed + 1))
         else
-            print_error "Failed to install ${type}: ${id}"
-            failed=$((failed + 1))
+            # Download component
+            local url="${RAW_URL}/${path}"
+
+            if ! curl -fsSL "$url" -o "$dest"; then
+                print_error "Failed to install ${type}: ${id}"
+                failed=$((failed + 1))
+                continue
+            fi
         fi
+
+        # Transform paths for global installation (any non-local path)
+        # Local paths: .opencode or */.opencode
+        if [[ "$INSTALL_DIR" != ".opencode" ]] && [[ "$INSTALL_DIR" != *"/.opencode" ]]; then
+            # Expand tilde and get absolute path for transformation
+            local expanded_path="${INSTALL_DIR/#\~/$HOME}"
+            # Transform @.opencode/context/ references to actual install path
+            sed -i.bak -e "s|@\.opencode/context/|@${expanded_path}/context/|g" \
+                       -e "s|\.opencode/context|${expanded_path}/context|g" "$dest" 2>/dev/null || true
+            rm -f "${dest}.bak" 2>/dev/null || true
+        fi
+
+        # Show appropriate message based on whether file existed before
+        if [ "$file_existed" = true ]; then
+            print_success "Updated ${type}: ${id}"
+        else
+            print_success "Installed ${type}: ${id}"
+        fi
+        installed=$((installed + 1))
     done
     
     # Handle additional paths for advanced profile
@@ -1016,7 +1103,7 @@ list_components() {
     
     echo -e "${BOLD}Available Components${NC}\n"
     
-    local categories=("agents" "subagents" "commands" "tools" "plugins" "contexts")
+    local categories=("agents" "subagents" "commands" "tools" "plugins" "contexts" "config")
     
     for category in "${categories[@]}"; do
         local cat_display=$(echo "$category" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}')
@@ -1072,6 +1159,15 @@ main() {
                     exit 1
                 fi
                 ;;
+            --local-files=*)
+                LOCAL_FILES=true
+                LOCAL_FILES_REGISTRY_PATH="${1#*=}"
+                shift
+                ;;
+            --local-files)
+                LOCAL_FILES=true
+                shift
+                ;;
             essential|--essential)
                 INSTALL_MODE="profile"
                 PROFILE="essential"
@@ -1122,12 +1218,16 @@ main() {
                 echo -e "${BOLD}Options:${NC}"
                 echo "  --install-dir PATH        Custom installation directory"
                 echo "                            (default: .opencode)"
+                echo "  --local-files[=PATH]      Use local files + local registry"
+                echo "                            (default PATH: ./registry.json next to install.sh)"
                 echo "  list, --list              List all available components"
                 echo "  help, --help, -h          Show this help message"
                 echo ""
                 echo -e "${BOLD}Environment Variables:${NC}"
                 echo "  OPENCODE_INSTALL_DIR      Installation directory"
                 echo "  OPENCODE_BRANCH           Git branch to install from (default: main)"
+                echo "  OPENCODE_REPO             GitHub repo slug (owner/repo)"
+                echo "  OPENCODE_RAW_URL          Full raw URL override (advanced)"
                 echo ""
                 echo -e "${BOLD}Examples:${NC}"
                 echo ""
@@ -1151,7 +1251,7 @@ main() {
                 echo "  $0 developer"
                 echo ""
                 echo "  ${CYAN}# Install from URL (non-interactive)${NC}"
-                echo "  curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s developer"
+                echo "  curl -fsSL https://raw.githubusercontent.com/${REPO_SLUG}/main/install.sh | bash -s developer"
                 echo ""
                 echo -e "${BOLD}Platform Support:${NC}"
                 echo "  ✓ Linux (bash 3.2+)"

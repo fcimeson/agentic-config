@@ -723,6 +723,18 @@
         "category": "essential"
       },
       {
+        "id": "opencode-config",
+        "name": "OpenCode Config",
+        "type": "config",
+        "path": ".opencode/opencode.json",
+        "description": "Default OpenCode configuration (keybinds, tools, MCP)",
+        "tags": [
+          "config"
+        ],
+        "dependencies": [],
+        "category": "essential"
+      },
+      {
         "id": "readme",
         "name": "README",
         "type": "config",
@@ -751,7 +763,8 @@
         "tool:env",
         "context:essential-patterns",
         "context:project-context",
-        "config:env-example"
+        "config:env-example",
+        "config:opencode-config"
       ]
     },
     "developer": {
@@ -787,6 +800,7 @@
         "context:workflows-task-breakdown",
         "context:workflows-review",
         "context:system-context-guide",
+        "config:opencode-config",
         "config:env-example",
         "config:readme"
       ]
@@ -810,7 +824,8 @@
         "context:essential-patterns",
         "context:project-context",
         "config:env-example",
-        "config:readme"
+        "config:readme",
+        "config:opencode-config"
       ]
     },
     "full": {
@@ -853,7 +868,8 @@
         "context:workflows-review",
         "context:system-context-guide",
         "config:env-example",
-        "config:readme"
+        "config:readme",
+        "config:opencode-config"
       ]
     },
     "advanced": {
@@ -903,7 +919,8 @@
         "context:workflows-review",
         "context:system-context-guide",
         "config:env-example",
-        "config:readme"
+        "config:readme",
+        "config:opencode-config"
       ],
       "additionalPaths": [
         ".Building/",
