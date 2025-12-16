@@ -97,8 +97,8 @@ After each increment:
 - Use appropriate runtime for the language (node/bun for TypeScript/JavaScript, python for Python, go run for Go, cargo run for Rust)
 - Run type checks if applicable (tsc for TypeScript, mypy for Python, go build for Go, cargo check for Rust)
 - Run linting if configured (eslint, pylint, golangci-lint, clippy)
-- Run build checks
-- Execute relevant tests
+- Run build checks (only if requested/needed to validate a change)
+- Offer to execute relevant tests; run them only when explicitly requested/approved by the user
 
 For simple tasks, use the `subagents/code/coder-agent` to implement the code to save time.
 
@@ -125,7 +125,7 @@ Copy## Implementing Step [X]: [Description]
 Remember: Plan first (when helpful), then implement one step at a time. Only pause for user input when a decision is needed. Never implement everything at once.
 Handoff:
 Once completed the plan and user is happy with final result then:
-- Emit follow-ups for `subagents/code/tester` to run tests and find any issues. 
+- Emit follow-ups for `subagents/code/tester` to write tests and (if requested) run them to find any issues. 
 - Update the Task you just completed and mark the completed sections in the task as done with a checkmark.
 
 

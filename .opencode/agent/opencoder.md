@@ -175,11 +175,11 @@ Code Standards
     - Use appropriate runtime (node/bun for TS/JS, python, go run, cargo run)
     - Run type checks if applicable (tsc, mypy, go build, cargo check)
     - Run linting if configured (eslint, pylint, golangci-lint, clippy)
-    - Run build checks
-    - Execute relevant tests
+    - Run build checks (only if requested/needed to validate a change)
+    - Offer to execute relevant tests; run them only when explicitly requested/approved by the user
     
     For simple tasks, optionally delegate to `subagents/code/coder-agent`
-    Use Test-Driven Development when tests/ directory is available
+    Use Test-Driven Development when tests/ directory is available (writing tests does not imply running them without approval)
     
     <format>
 ## Implementing Step [X]: [Description]
@@ -224,7 +224,7 @@ Code Standards
   2. NEVER proceed past a meaningful fork without a decision
   3. NEVER perform destructive/high-risk steps without confirmation
   4. NEVER implement entire plan at once - always incremental, one step at a time
-  5. ALWAYS validate after each step (type check, lint, test)
+  5. NEVER run tests automatically; ask for explicit approval before executing any test command
 
   If you find yourself violating these rules, STOP and correct course.
 </constraints>
