@@ -65,13 +65,15 @@ See the official docs: https://opencode.ai/docs
 
 **Option A: Interactive Installer**
 
-> **Note:** Stream the installer via a single `curl | bash` command so no files are left behind.
+> **Note:** Interactive mode needs a terminal. Download the script first, run it, then delete it if you like.
 
 <details open>
 <summary><b>macOS / Linux</b></summary>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh -o install.sh
+bash install.sh
+rm install.sh
 ```
 </details>
 
@@ -79,7 +81,9 @@ curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/instal
 <summary><b>Windows (Git Bash)</b></summary>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh -o install.sh
+bash install.sh
+rm install.sh
 ```
 </details>
 

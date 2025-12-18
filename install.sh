@@ -33,14 +33,14 @@ if [ "$PLATFORM" = "Windows" ] && [ -z "$WT_SESSION" ] && [ -z "$ConEmuPID" ]; t
     BOLD=''
     NC=''
 else
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    MAGENTA='\033[0;35m'
-    CYAN='\033[0;36m'
-    BOLD='\033[1m'
-    NC='\033[0m' # No Color
+    RED=$'\033[0;31m'
+    GREEN=$'\033[0;32m'
+    YELLOW=$'\033[1;33m'
+    BLUE=$'\033[0;34m'
+    MAGENTA=$'\033[0;35m'
+    CYAN=$'\033[0;36m'
+    BOLD=$'\033[1m'
+    NC=$'\033[0m' # No Color
 fi
 
 # Configuration
@@ -112,33 +112,29 @@ jq_exec() {
 }
 
 print_header() {
-    echo -e "${CYAN}${BOLD}"
-    echo "╔════════════════════════════════════════════════════════════════╗"
-    echo "║                                                                ║"
-    echo "║           OpenAgents Installer v1.0.0                         ║"
-    echo "║                                                                ║"
-    echo "╚════════════════════════════════════════════════════════════════╝"
-    echo -e "${NC}"
+printf "%b\n" "${CYAN}${BOLD}"
+printf "%b\n" "${NC}"
+
 }
 
 print_success() {
-    echo -e "${GREEN}✓${NC} $1"
+    printf "%b\n" "${GREEN}✓${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}✗${NC} $1"
+    printf "%b\n" "${RED}✗${NC} $1"
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ${NC} $1"
+    printf "%b\n" "${BLUE}ℹ${NC} $1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠${NC} $1"
+    printf "%b\n" "${YELLOW}⚠${NC} $1"
 }
 
 print_step() {
-    echo -e "\n${MAGENTA}${BOLD}▶${NC} $1\n"
+    printf "%b\n\n" "${MAGENTA}${BOLD}▶${NC} $1"
 }
 
 #############################################################################
@@ -400,16 +396,17 @@ check_interactive_mode() {
         echo "You're running this script in a pipe (e.g., curl | bash)"
         echo "For interactive mode, download the script first:"
         echo ""
-        echo -e "${CYAN}# Download the script${NC}"
+        printf "%b\n" "${CYAN}# Download the script${NC}"
         echo "curl -fsSL https://raw.githubusercontent.com/${REPO_SLUG}/main/install.sh -o install.sh"
-        echo ""
-        echo -e "${CYAN}# Run interactively${NC}"
+
+        printf "%b\n" "${CYAN}# Run interactively${NC}"
         echo "bash install.sh"
-        echo ""
+
         echo "Or use a profile directly:"
-        echo ""
-        echo -e "${CYAN}# Quick install with profile${NC}"
+
+        printf "%b\n" "${CYAN}# Quick install with profile${NC}"
         echo "curl -fsSL https://raw.githubusercontent.com/${REPO_SLUG}/main/install.sh | bash -s essential"
+
         echo ""
         echo "Available profiles: essential, developer, business, full, advanced"
         echo ""
@@ -425,14 +422,14 @@ show_install_location_menu() {
     
     local global_path=$(get_global_install_path)
     
-    echo -e "${BOLD}Choose installation location:${NC}\n"
-    echo -e "  ${GREEN}1) Local${NC} - Install to ${CYAN}.opencode/${NC} in current directory"
+    printf "%b\n" "${BOLD}Choose installation location:${NC}"
+    printf "%b\n" "  ${GREEN}1) Local${NC} - Install to ${CYAN}.opencode/${NC} in current directory"
     echo "     (Best for project-specific agents)"
     echo ""
-    echo -e "  ${BLUE}2) Global${NC} - Install to ${CYAN}${global_path}${NC}"
+    printf "%b\n" "  ${BLUE}2) Global${NC} - Install to ${CYAN}${global_path}${NC}"
     echo "     (Best for user-wide agents available everywhere)"
     echo ""
-    echo -e "  ${MAGENTA}3) Custom${NC} - Enter exact path"
+    printf "%b\n" "  ${MAGENTA}3) Custom${NC} - Enter exact path"
     echo "     Examples:"
     case "$PLATFORM" in
         Windows)
