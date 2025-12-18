@@ -151,3 +151,47 @@ list: ideas ## Alias for 'ideas'
 open: board ## Alias for 'board'
 high-priority: ## List all high priority items
 	@make by-priority PRIORITY=high
+
+#############################################################################
+# Python Installer Tests
+#############################################################################
+
+.PHONY: test test-verbose test-config test-paths test-registry test-install clean-test
+
+test: ## Run all Python installer tests
+	@echo "Running all installer tests..."
+	@python3 -m unittest tests_installer.test_config
+	@python3 -m unittest tests_installer.test_paths
+	@python3 -m unittest tests_installer.test_registry
+	@echo ""
+	@echo "✓ All tests passed!"
+
+test-verbose: ## Run tests with verbose output
+	@python3 -m unittest tests_installer.test_config -v
+	@python3 -m unittest tests_installer.test_paths -v
+	@python3 -m unittest tests_installer.test_registry -v
+
+test-config: ## Run config tests only
+	@python3 -m unittest tests_installer.test_config -v
+
+test-paths: ## Run path tests only
+	@python3 -m unittest tests_installer.test_paths -v
+
+test-registry: ## Run registry tests only
+	@python3 -m unittest tests_installer.test_registry -v
+
+test-install: ## Test installation to /tmp
+	@echo "Testing installation to /tmp/test-opencode..."
+	@python3 install.py essential --install-dir /tmp/test-opencode
+	@echo ""
+	@echo "Installed files:"
+	@ls -la /tmp/test-opencode/
+	@echo ""
+	@echo "To clean up: make clean-test"
+
+clean-test: ## Remove test artifacts
+	@echo "Cleaning test artifacts..."
+	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name '*.pyc' -delete 2>/dev/null || true
+	@rm -rf /tmp/test-opencode 2>/dev/null || true
+	@echo "✓ Clean complete"

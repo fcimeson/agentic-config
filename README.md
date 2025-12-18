@@ -61,7 +61,10 @@ When resolving conflicts, prioritize keeping this fork's installer/profile direc
 
 ### Step 1: Install OpenCode CLI
 See the official docs: https://opencode.ai/docs
+
 ### Step 2: Install Agents & Commands
+
+> **New! Python Installer:** The installer now uses Python (3.9+) instead of bash for improved cross-platform compatibility and easier maintenance. The `install.sh` script automatically detects and runs Python. Legacy bash installer is available at `install.sh.bak`.
 
 **Option A: Interactive Installer**
 
@@ -78,6 +81,7 @@ rm install.sh
 </details>
 
 <details>
+<parameter name="filePath">/home/fcimeson/agentic-config/README.md
 <summary><b>Windows (Git Bash)</b></summary>
 
 ```bash
