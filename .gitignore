@@ -178,6 +178,17 @@ dist
 # Serena
 .serena/
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
 # Temporary files
 tmp/
 temp/
