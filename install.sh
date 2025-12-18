@@ -51,30 +51,37 @@ detect_github_repo_slug() {
     if [ -n "${OPENCODE_REPO:-}" ]; then
         printf "%s" "${OPENCODE_REPO}"
         return 0
-    fi
+    }
 
-    # Best-effort: infer from git origin when running in a local clone
-    if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        local origin_url
-        origin_url="$(git config --get remote.origin.url 2>/dev/null || true)"
+    # Best-effort: infer from git origin when running from a local checkout of this installer
+    # Only attempt detection if the installer script exists on disk (not when streamed via curl)
+    local script_path="${BASH_SOURCE[0]}"
+    if [[ -n "$script_path" && "$script_path" != /dev/fd/* && "$script_path" != /proc/self/fd/* ]] && [ -f "$script_path" ] && command -v git >/dev/null 2>&1; then
+        local script_dir
+        script_dir="$(cd "$(dirname "$script_path")" && pwd)"
+        if git -C "$script_dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+            local origin_url
+            origin_url="$(git -C "$script_dir" config --get remote.origin.url 2>/dev/null || true)"
 
-        # Support git@github.com:owner/repo(.git)
-        if [[ "$origin_url" =~ ^git@github\.com:([^/]+/[^/]+)(\.git)?$ ]]; then
-            local slug="${BASH_REMATCH[1]}"
-            printf "%s" "${slug%.git}"
-            return 0
-        fi
+            # Support git@github.com:owner/repo(.git)
+            if [[ "$origin_url" =~ ^git@github\.com:([^/]+/[^/]+)(\.git)?$ ]]; then
+                local slug="${BASH_REMATCH[1]}"
+                printf "%s" "${slug%.git}"
+                return 0
+            fi
 
-        # Support https://github.com/owner/repo(.git)
-        if [[ "$origin_url" =~ ^https?://github\.com/([^/]+/[^/]+)(\.git)?$ ]]; then
-            local slug="${BASH_REMATCH[1]}"
-            printf "%s" "${slug%.git}"
-            return 0
+            # Support https://github.com/owner/repo(.git)
+            if [[ "$origin_url" =~ ^https?://github\.com/([^/]+/[^/]+)(\.git)?$ ]]; then
+                local slug="${BASH_REMATCH[1]}"
+                printf "%s" "${slug%.git}"
+                return 0
+            fi
         fi
     fi
 
     return 1
 }
+
 
 DEFAULT_REPO_SLUG="fcimeson/agentic-config"
 REPO_SLUG="$(detect_github_repo_slug || true)"
