@@ -82,7 +82,8 @@ REPO_SLUG="${REPO_SLUG:-$DEFAULT_REPO_SLUG}"
 
 REPO_URL="https://github.com/${REPO_SLUG}"
 RAW_URL="${OPENCODE_RAW_URL:-https://raw.githubusercontent.com/${REPO_SLUG}/${BRANCH}}"
-REGISTRY_URL="${RAW_URL}/registry.json"
+DEFAULT_REGISTRY_URL="https://raw.githubusercontent.com/fcimeson/agentic-config/${BRANCH}/registry.json"
+REGISTRY_URL="${OPENCODE_REGISTRY_URL:-${DEFAULT_REGISTRY_URL}}"
 INSTALL_DIR="${OPENCODE_INSTALL_DIR:-.opencode}"  # Allow override via environment variable
 TEMP_DIR="/tmp/opencode-installer-$$"
 
@@ -1228,6 +1229,7 @@ main() {
                 echo "  OPENCODE_BRANCH           Git branch to install from (default: main)"
                 echo "  OPENCODE_REPO             GitHub repo slug (owner/repo)"
                 echo "  OPENCODE_RAW_URL          Full raw URL override (advanced)"
+                echo "  OPENCODE_REGISTRY_URL     Custom registry.json URL"
                 echo ""
                 echo -e "${BOLD}Examples:${NC}"
                 echo ""

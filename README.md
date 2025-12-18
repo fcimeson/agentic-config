@@ -65,17 +65,13 @@ See the official docs: https://opencode.ai/docs
 
 **Option A: Interactive Installer**
 
-> **Note:** Interactive mode requires downloading the script first (can't run through pipe)
+> **Note:** Stream the installer via a single `curl | bash` command so no files are left behind.
 
 <details open>
 <summary><b>macOS / Linux</b></summary>
 
 ```bash
-# Download the installer
-curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh -o install.sh
-
-# Run interactively
-bash install.sh
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash
 ```
 </details>
 
@@ -83,11 +79,7 @@ bash install.sh
 <summary><b>Windows (Git Bash)</b></summary>
 
 ```bash
-# Download the installer
-curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh -o install.sh
-
-# Run interactively
-bash install.sh
+curl -fsSL https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh | bash
 ```
 </details>
 
@@ -95,14 +87,9 @@ bash install.sh
 <summary><b>Windows (PowerShell)</b></summary>
 
 ```powershell
-# Download the script
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh" -OutFile "install.sh"
-
-# Run with Git Bash
-& "C:\Program Files\Git\bin\bash.exe" install.sh
-
-# Or run with WSL
-wsl bash install.sh
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/fcimeson/agentic-config/main/install.sh" -OutFile "$env:TEMP\install.sh"
+& "C:\Program Files\Git\bin\bash.exe" "$env:TEMP\install.sh"
+Remove-Item "$env:TEMP\install.sh" -Force
 ```
 
 > **Note:** Git Bash comes with Git for Windows. [Download here](https://git-scm.com/download/win)
